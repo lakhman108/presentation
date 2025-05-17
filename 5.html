@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Authentication System - Sarthi</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4efe9 100%);
+        }
+        .slide {
+            width: 1280px;
+            min-height: 720px;
+            overflow: hidden;
+            position: relative;
+            background: linear-gradient(135deg, #2C3E50 0%, #203A43 100%);
+            color: white;
+        }
+        .gradient-text {
+            background: linear-gradient(90deg, #4CC9F0, #4895EF, #4361EE);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        .bg-shape {
+            position: absolute;
+            opacity: 0.05;
+            z-index: 0;
+        }
+        .content {
+            position: relative;
+            z-index: 10;
+        }
+        .auth-card {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            backdrop-filter: blur(5px);
+            transition: all 0.3s ease;
+        }
+        .auth-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+        }
+        .auth-flow-arrow {
+            position: absolute;
+            color: #4CC9F0;
+            font-size: 24px;
+            opacity: 0.7;
+        }
+        .token-pill {
+            background: linear-gradient(90deg, #4361EE, #3A0CA3);
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="slide flex flex-col p-16">
+        <!-- Background elements -->
+        <div class="bg-shape rounded-full h-96 w-96 absolute -bottom-20 -right-20 bg-blue-400"></div>
+        <div class="bg-shape rounded-full h-64 w-64 absolute -top-10 -left-10 bg-teal-400"></div>
+        <div class="bg-shape h-40 w-40 absolute top-1/3 right-1/4 transform rotate-45 bg-blue-300"></div>
+
+        <!-- Main content -->
+        <div class="content w-full h-full">
+            <!-- Header -->
+            <div class="flex items-center mb-8">
+                <div class="w-12 h-12 rounded-full bg-gradient-to-r from-blue-400 to-teal-400 flex items-center justify-center mr-4">
+                    <i class="fas fa-lock text-2xl text-white"></i>
+                </div>
+                <h1 class="text-4xl font-bold gradient-text">Authentication System</h1>
+                <span class="ml-2 text-gray-400">(JWT)</span>
+            </div>
+
+            <!-- Authentication Flow Diagram -->
+            <div class="relative mx-auto mb-8 h-64">
+                <!-- Register Card -->
+                <div class="auth-card p-5 absolute left-0 top-0 w-72">
+                    <div class="flex items-center mb-3">
+                        <div class="w-10 h-10 bg-blue-500 rounded-full flex items-center justify-center mr-3">
+                            <i class="fas fa-user-plus text-white"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold text-blue-300">Registration</h3>
+                    </div>
+                    <ul class="pl-4 space-y-2 text-sm">
+                        <li class="flex items-start">
+                            <i class="fas fa-check-circle text-green-400 mt-1 mr-2"></i>
+                            <span>User data validation</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-check-circle text-green-400 mt-1 mr-2"></i>
+                            <span>Password hashing with <code class="bg-gray-800 px-1 rounded">bcrypt</code></span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-check-circle text-green-400 mt-1 mr-2"></i>
+                            <span>Store user in MongoDB</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Login Card -->
+                <div class="auth-card p-5 absolute left-1/3 top-0 transform -translate-x-1/6 w-72">
+                    <div class="flex items-center mb-3">
+                        <div class="w-10 h-10 bg-teal-500 rounded-full flex items-center justify-center mr-3">
+                            <i class="fas fa-sign-in-alt text-white"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold text-teal-300">Login</h3>
+                    </div>
+                    <ul class="pl-4 space-y-2 text-sm">
+                        <li class="flex items-start">
+                            <i class="fas fa-check-circle text-green-400 mt-1 mr-2"></i>
+                            <span>Verify credentials</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-check-circle text-green-400 mt-1 mr-2"></i>
+                            <span>Generate and sign JWT token</span>
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-arrow-right text-blue-400 mr-2"></i>
+                            <span class="token-pill">
+                                <i class="fas fa-key text-xs mr-1"></i>JWT
+                            </span>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Protected Routes Card -->
+                <div class="auth-card p-5 absolute right-0 top-0 w-72">
+                    <div class="flex items-center mb-3">
+                        <div class="w-10 h-10 bg-purple-500 rounded-full flex items-center justify-center mr-3">
+                            <i class="fas fa-shield-alt text-white"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold text-purple-300">Protected Routes</h3>
+                    </div>
+                    <ul class="pl-4 space-y-2 text-sm">
+                        <li class="flex items-start">
+                            <i class="fas fa-check-circle text-green-400 mt-1 mr-2"></i>
+                            <span><code class="bg-gray-800 px-1 rounded">Authorization: Bearer &lt;token&gt;</code></span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-check-circle text-green-400 mt-1 mr-2"></i>
+                            <span>Middleware verifies token</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-check-circle text-green-400 mt-1 mr-2"></i>
+                            <span>Role-based access control</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Arrows connecting the flow -->
+                <div class="auth-flow-arrow absolute left-[285px] top-[60px]">
+                    <i class="fas fa-long-arrow-alt-right"></i>
+                </div>
+                <div class="auth-flow-arrow absolute left-[610px] top-[60px]">
+                    <i class="fas fa-long-arrow-alt-right"></i>
+                </div>
+            </div>
+
+            <!-- Authentication Code Example -->
+            <div class="grid grid-cols-2 gap-6">
+                <!-- JWT Implementation -->
+                <div class="auth-card p-5">
+                    <div class="flex items-center mb-3">
+                        <i class="fas fa-code text-2xl mr-3 text-blue-400"></i>
+                        <h3 class="text-xl font-semibold">JWT Authentication Flow</h3>
+                    </div>
+                    <pre class="bg-gray-900 p-4 rounded-md text-sm overflow-x-auto">
+<span class="text-green-400">// Generate token during login</span>
+<span class="text-blue-300">const</span> <span class="text-yellow-300">token</span> = jwt.sign(
+  { userId: user._id, role: user.role },
+  <span class="text-orange-300">process.env.JWT_SECRET</span>,
+  { expiresIn: <span class="text-orange-300">'24h'</span> }
+);
+
+<span class="text-green-400">// Client stores token in localStorage</span>
+<span class="text-green-400">// Uses token for protected requests:</span>
+<span class="text-blue-300">const</span> <span class="text-yellow-300">headers</span> = {
+  <span class="text-orange-300">'Authorization'</span>: <span class="text-orange-300">`Bearer ${token}`</span>
+};</pre>
+                </div>
+
+                <!-- Auth Middleware -->
+                <div class="auth-card p-5">
+                    <div class="flex items-center mb-3">
+                        <i class="fas fa-user-shield text-2xl mr-3 text-teal-400"></i>
+                        <h3 class="text-xl font-semibold">Auth Middleware</h3>
+                    </div>
+                    <pre class="bg-gray-900 p-4 rounded-md text-sm overflow-x-auto">
+<span class="text-blue-300">const</span> <span class="text-yellow-300">authMiddleware</span> = (req, res, next) => {
+  <span class="text-blue-300">const</span> <span class="text-yellow-300">token</span> = req.headers.authorization?.split(<span class="text-orange-300">' '</span>)[<span class="text-purple-300">1</span>];
+
+  <span class="text-blue-300">if</span> (!token) {
+    <span class="text-blue-300">return</span> res.status(<span class="text-purple-300">401</span>).json({
+      message: <span class="text-orange-300">'Unauthorized'</span>
+    });
+  }
+
+  <span class="text-blue-300">try</span> {
+    <span class="text-blue-300">const</span> <span class="text-yellow-300">decoded</span> = jwt.verify(token, <span class="text-orange-300">process.env.JWT_SECRET</span>);
+    req.user = decoded;
+    next();
+  } <span class="text-blue-300">catch</span> (err) {
+    <span class="text-blue-300">return</span> res.status(<span class="text-purple-300">401</span>).json({
+      message: <span class="text-orange-300">'Invalid token'</span>
+    });
+  }
+};</pre>
+                </div>
+            </div>
+
+            <!-- Role-based Access -->
+            <div class="mt-6 bg-white/10 p-4 rounded-lg">
+                <h3 class="text-xl font-semibold mb-2 flex items-center">
+                    <i class="fas fa-user-tag text-yellow-300 mr-3"></i>
+                    Role-Based Access Control
+                </h3>
+                <div class="grid grid-cols-2 gap-6">
+                    <div class="flex items-center">
+                        <div class="w-12 h-12 bg-gradient-to-r from-green-400 to-green-600 rounded-full flex items-center justify-center mr-3">
+                            <i class="fas fa-chalkboard-teacher text-white text-xl"></i>
+                        </div>
+                        <div>
+                            <h4 class="text-lg font-medium text-green-300">Teacher Role</h4>
+                            <p class="text-sm text-gray-300">Upload videos, create classrooms, manage students</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center">
+                        <div class="w-12 h-12 bg-gradient-to-r from-blue-400 to-blue-600 rounded-full flex items-center justify-center mr-3">
+                            <i class="fas fa-user-graduate text-white text-xl"></i>
+                        </div>
+                        <div>
+                            <h4 class="text-lg font-medium text-blue-300">Student Role</h4>
+                            <p class="text-sm text-gray-300">Join classrooms, watch videos, participate in discussions</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slide number -->
+            <div class="absolute bottom-6 right-6 text-gray-400 text-sm">
+                5/12
+            </div>
+        </div>
+    </div>
+</body>
+</html>

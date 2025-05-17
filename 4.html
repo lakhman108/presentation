@@ -1,0 +1,322 @@
+<html lang="en"><head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Folder Structure - Sarthi</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4efe9 100%);
+        }
+        .slide {
+            width: 1280px;
+            min-height: 720px;
+            overflow: hidden;
+            position: relative;
+            background: linear-gradient(135deg, #2C3E50 0%, #203A43 100%);
+            color: white;
+        }
+        .gradient-text {
+            background: linear-gradient(90deg, #4CC9F0, #4895EF, #4361EE);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        .bg-shape {
+            position: absolute;
+            opacity: 0.05;
+            z-index: 0;
+        }
+        .content {
+            position: relative;
+            z-index: 10;
+        }
+        .folder-card {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            backdrop-filter: blur(5px);
+            transition: all 0.3s ease;
+        }
+        .folder-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+        }
+        .folder-item {
+            padding: 6px 0;
+            transition: all 0.2s;
+        }
+        .folder-item:hover {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 4px;
+        }
+        .backend-item { color: #4CC9F0; }
+        .frontend-item { color: #4895EF; }
+        .storage-item { color: #4361EE; }
+    </style>
+<style>
+    .genspark-badge-button {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background-color: #333;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      padding: 8px 12px;
+      font-size: 12px;
+      cursor: pointer;
+      z-index: 9999;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .genspark-modal {
+      display: none;
+      position: fixed;
+      bottom: 80px;
+      right: 20px;
+      z-index: 10000;
+      justify-content: end;
+    }
+
+    .genspark-modal-content {
+      background-color: white;
+      border-radius: 8px;
+      max-width: 450px;
+      width: 100%;
+      box-sizing: border-box;
+      padding: 20px;
+      position: relative;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      font-size: 14px;
+    }
+    @media (max-width: 768px) {
+      .genspark-modal-content {
+        max-width: 90%;
+      }
+    }
+
+    .genspark-close {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      font-size: 20px;
+      cursor: pointer;
+      background: none;
+      border: none;
+    }
+
+    .genspark-title {
+      margin-bottom: 8px;
+      font-weight: normal;
+      display: inline;
+      font-size: 14px;
+    }
+
+    .genspark-report {
+      color: #909499;
+      text-decoration: underline;
+      cursor: pointer;
+      margin-bottom: 14px;
+      display: inline;
+    }
+
+    .genspark-info {
+      margin: 25px 0;
+      color: #333;
+      font-size: 14px;
+    }
+
+    .genspark-buttons {
+      display: flex;
+      gap: 10px;
+    }
+
+    .genspark-remove-btn {
+      background-color: #f5f5f5;
+      border: 1px solid #ddd;
+      color: #333;
+      padding: 4px 14px;
+      border-radius: 8px;
+      cursor: pointer;
+      flex: 1;
+      font-size: 14px;
+      box-sizing: border-box;
+    }
+
+    .genspark-go-btn {
+      background-color: #222;
+      border: none;
+      color: white;
+      padding: 4px 14px;
+      border-radius: 8px;
+      cursor: pointer;
+      flex: 1;
+      font-size: 14px;
+      box-sizing: border-box;
+    }
+  </style><script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script></head>
+<body>
+    <div class="slide flex flex-col p-16">
+        <!-- Background elements -->
+        <div class="bg-shape rounded-full h-96 w-96 absolute -bottom-20 -right-20 bg-blue-400"></div>
+        <div class="bg-shape rounded-full h-64 w-64 absolute -top-10 -left-10 bg-teal-400"></div>
+        <div class="bg-shape h-40 w-40 absolute bottom-1/3 left-1/4 transform rotate-45 bg-blue-300"></div>
+
+        <!-- Main content -->
+        <div class="content w-full h-full">
+            <!-- Header -->
+            <div class="flex items-center mb-8">
+                <div class="w-12 h-12 rounded-full bg-gradient-to-r from-blue-400 to-teal-400 flex items-center justify-center mr-4">
+                    <i class="fas fa-folder-tree text-2xl text-white"></i>
+                </div>
+                <h1 class="text-4xl font-bold gradient-text">Folder Structure</h1>
+                <span class="ml-2 text-gray-400">(Code Organization)</span>
+            </div>
+
+            <!-- Folder Structure Cards -->
+            <div class="grid grid-cols-3 gap-6 mb-4">
+                <!-- Backend Structure -->
+                <div class="folder-card p-6">
+                    <div class="flex items-center mb-3">
+                        <i class="fas fa-server text-2xl mr-3 backend-item"></i>
+                        <h2 class="text-2xl font-semibold">Backend/</h2>
+                    </div>
+                    <div class="pl-4 border-l-2 border-blue-400/30">
+                        <div class="folder-item pl-2 flex items-center">
+                            <i class="fas fa-folder backend-item mr-2"></i>
+                            <span>routes/</span>
+                        </div>
+                        <div class="folder-item pl-2 flex items-center">
+                            <i class="fas fa-folder backend-item mr-2"></i>
+                            <span>controllers/</span>
+                        </div>
+                        <div class="folder-item pl-2 flex items-center">
+                            <i class="fas fa-folder backend-item mr-2"></i>
+                            <span>models/</span>
+                        </div>
+                        <div class="folder-item pl-2 flex items-center">
+                            <i class="fas fa-file-code backend-item mr-2"></i>
+                            <span>ffmpegService.js</span>
+                        </div>
+                        <div class="folder-item pl-2 flex items-center">
+                            <i class="fas fa-file-code backend-item mr-2"></i>
+                            <span>server.js</span>
+                        </div>
+                    </div>
+                    <div class="mt-4 bg-blue-900/30 p-3 rounded-md">
+                        <p class="text-sm text-blue-200"><i class="fas fa-circle-info mr-1"></i> Express.js server with MongoDB integration</p>
+                    </div>
+                </div>
+
+                <!-- Frontend Structure -->
+                <div class="folder-card p-6">
+                    <div class="flex items-center mb-3">
+                        <i class="fas fa-desktop text-2xl mr-3 frontend-item"></i>
+                        <h2 class="text-2xl font-semibold">Frontend/</h2>
+                    </div>
+                    <div class="pl-4 border-l-2 border-blue-500/30">
+                        <div class="folder-item pl-2 flex items-center">
+                            <i class="fas fa-folder frontend-item mr-2"></i>
+                            <span>components/</span>
+                        </div>
+                        <div class="folder-item pl-2 flex items-center">
+                            <i class="fas fa-folder frontend-item mr-2"></i>
+                            <span>pages/</span>
+                        </div>
+                        <div class="folder-item pl-2 flex items-center">
+                            <i class="fas fa-folder frontend-item mr-2"></i>
+                            <span>context/</span>
+                        </div>
+                        <div class="folder-item pl-2 flex items-center">
+                            <i class="fas fa-file-code frontend-item mr-2"></i>
+                            <span>VideoPlayer.jsx</span>
+                        </div>
+                        <div class="folder-item pl-2 flex items-center">
+                            <i class="fas fa-file frontend-item mr-2"></i>
+                            <span>App.jsx</span>
+                        </div>
+                    </div>
+                    <div class="mt-4 bg-blue-900/30 p-3 rounded-md">
+                        <p class="text-sm text-blue-200"><i class="fas fa-circle-info mr-1"></i> React-based UI with classroom components</p>
+                    </div>
+                </div>
+
+                <!-- Storage Structure -->
+                <div class="folder-card p-6">
+                    <div class="flex items-center mb-3">
+                        <i class="fas fa-database text-2xl mr-3 storage-item"></i>
+                        <h2 class="text-2xl font-semibold">Public/</h2>
+                    </div>
+                    <div class="pl-4 border-l-2 border-indigo-500/30">
+                        <div class="folder-item pl-2 flex items-center">
+                            <i class="fas fa-folder storage-item mr-2"></i>
+                            <span>streams/</span>
+                        </div>
+                        <div class="folder-item pl-6 flex items-center">
+                            <i class="fas fa-folder storage-item mr-2"></i>
+                            <span>video-123/</span>
+                        </div>
+                        <div class="folder-item pl-10 flex items-center">
+                            <i class="fas fa-file storage-item mr-2"></i>
+                            <span>playlist.m3u8</span>
+                        </div>
+                        <div class="folder-item pl-10 flex items-center">
+                            <i class="fas fa-file storage-item mr-2"></i>
+                            <span>0.ts, 1.ts, 2.ts...</span>
+                        </div>
+                    </div>
+                    <div class="mt-4 bg-blue-900/30 p-3 rounded-md">
+                        <p class="text-sm text-blue-200"><i class="fas fa-circle-info mr-1"></i> HLS video segments for adaptive streaming</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Additional Notes -->
+            <div class="mt-2 bg-white/10 p-4 rounded-lg">
+                <h3 class="text-xl font-semibold mb-2 flex items-center">
+                    <i class="fas fa-code-branch text-teal-300 mr-3"></i>
+                    Code Structure Notes
+                </h3>
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="flex items-start">
+                        <i class="fas fa-check-circle text-green-400 mt-1 mr-2"></i>
+                        <p>Clear separation of concerns with MVC pattern in backend</p>
+                    </div>
+                    <div class="flex items-start">
+                        <i class="fas fa-check-circle text-green-400 mt-1 mr-2"></i>
+                        <p>Component-based architecture in React frontend</p>
+                    </div>
+                    <div class="flex items-start">
+                        <i class="fas fa-check-circle text-green-400 mt-1 mr-2"></i>
+                        <p>Organized video storage with unique IDs</p>
+                    </div>
+                    <div class="flex items-start">
+
+                        <p></p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slide number -->
+            <div class="absolute bottom-6 right-6 text-gray-400 text-sm">
+                4/12
+            </div>
+        </div>
+    </div>
+
+<script src="https://www.genspark.ai/slide-inner.js?_v=1"></script>
+    <script id="html_badge_script1">
+        window.__genspark_remove_badge_link = "https://www.genspark.ai/api/html_badge/" +
+            "remove_badge?token=To%2FBnjzloZ3UfQdcSaYfDsvMedj4NkjS4WnWkOghICMD5OraU%2BtWW%2BVzaWVleLaZs45s%2BpeFhgEd1bhcqL3NgYgvUClUjWnQ%2BA%2Fh1gwk66PW56lMy6%2FD5xubdygjOER%2F5IuIzxZF80cy4NjNyK6xccyDs7SnFUiajNzTE%2FNMZ1zL0AAL4aKlrFfI4VcKt9QFnL68cvon263WRDeE9DHOlEckP2Bzx6NWlFsaByns9d1sfc4C4FH9YL%2Fa7TszxCumVTg6EkAOobKvUvGECuSE8dg1HhNbSjjI0wWnouFC0m226c2DtdSVIF6aR%2B527JDNKjEQNCU7BtGbgvketmvD%2B01xbwVodx81nnWAmJpFrY72qAvHRCLgrb7tyOKeYq0mEfMd%2FsMN5lTeKaxr9ZV%2F46ry9xtFTunVHQIeRTqscnF%2FfliUzBUTQH5fMYsTrnUQPpi3lMr%2F4i9KJkUJmLZK54zGqDjsllFC0859tAM9jkxrFXmz%2FvfDrx4Sf1uUdvgufiwYpp6r%2BoCpiOVOpYutqtSRxbOCqApJKyFaoS0QyN5kaCQjVPYj38FD3QvpINL3POrUlMfA%2FLpABT6%2FLAgwABP05hytRlwthikhHq%2FEbVqcO0AZLSdTdfy7Qo7aYf8sZRvL9T44%2FqtOKDOzmrWItDco9UOV7f6k6t5Cv6gz3whGYmE4sCXSQIJ6DSxLbnrt0Hsl%2Fg0kurtjvB0is0cpsiYdQYYs71hbBQhGXkmSVMNxLNvqLVY6KJtBKurC9jkF";
+        window.__genspark_locale = "en-US";
+        window.__genspark_token = "To/BnjzloZ3UfQdcSaYfDsvMedj4NkjS4WnWkOghICMD5OraU+tWW+VzaWVleLaZs45s+peFhgEd1bhcqL3NgYgvUClUjWnQ+A/h1gwk66PW56lMy6/D5xubdygjOER/5IuIzxZF80cy4NjNyK6xccyDs7SnFUiajNzTE/NMZ1zL0AAL4aKlrFfI4VcKt9QFnL68cvon263WRDeE9DHOlEckP2Bzx6NWlFsaByns9d1sfc4C4FH9YL/a7TszxCumVTg6EkAOobKvUvGECuSE8dg1HhNbSjjI0wWnouFC0m226c2DtdSVIF6aR+527JDNKjEQNCU7BtGbgvketmvD+01xbwVodx81nnWAmJpFrY72qAvHRCLgrb7tyOKeYq0mEfMd/sMN5lTeKaxr9ZV/46ry9xtFTunVHQIeRTqscnF/fliUzBUTQH5fMYsTrnUQPpi3lMr/4i9KJkUJmLZK54zGqDjsllFC0859tAM9jkxrFXmz/vfDrx4Sf1uUdvgufiwYpp6r+oCpiOVOpYutqtSRxbOCqApJKyFaoS0QyN5kaCQjVPYj38FD3QvpINL3POrUlMfA/LpABT6/LAgwABP05hytRlwthikhHq/EbVqcO0AZLSdTdfy7Qo7aYf8sZRvL9T44/qtOKDOzmrWItDco9UOV7f6k6t5Cv6gz3whGYmE4sCXSQIJ6DSxLbnrt0Hsl/g0kurtjvB0is0cpsiYdQYYs71hbBQhGXkmSVMNxLNvqLVY6KJtBKurC9jkF";
+    </script>
+
+        <script id="html_badge_script2" src="https://www.genspark.ai/html_badge.js"></script>
+        </body></html>

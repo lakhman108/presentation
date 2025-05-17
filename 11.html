@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Deployment & CI/CD - Sarthi</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4efe9 100%);
+        }
+        .slide {
+            width: 1280px;
+            min-height: 720px;
+            overflow: hidden;
+            position: relative;
+            background: linear-gradient(135deg, #2C3E50 0%, #203A43 100%);
+            color: white;
+        }
+        .gradient-text {
+            background: linear-gradient(90deg, #4CC9F0, #4895EF, #4361EE);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        .bg-shape {
+            position: absolute;
+            opacity: 0.05;
+            z-index: 0;
+        }
+        .content {
+            position: relative;
+            z-index: 10;
+        }
+        .code-block {
+            background: rgba(0, 0, 0, 0.3);
+            border-left: 3px solid #4CC9F0;
+            border-radius: 6px;
+            font-family: 'Courier New', monospace;
+            padding: 12px;
+            font-size: 14px;
+            overflow-x: auto;
+        }
+        .card {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            backdrop-filter: blur(5px);
+            transition: all 0.3s ease;
+        }
+        .card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+        }
+        .service-icon {
+            filter: drop-shadow(0 0 8px rgba(76, 201, 240, 0.5));
+            transition: all 0.3s ease;
+        }
+        .service-card:hover .service-icon {
+            transform: scale(1.1);
+        }
+        .service-card {
+            transition: all 0.3s ease;
+        }
+        .service-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+        }
+        .deploy-arrow {
+            position: absolute;
+            height: 2px;
+            background: linear-gradient(90deg, rgba(76, 201, 240, 0.7), rgba(76, 201, 240, 0.3));
+            z-index: 0;
+        }
+        .deploy-arrow::after {
+            content: '';
+            position: absolute;
+            right: -1px;
+            top: -4px;
+            border-left: 10px solid rgba(76, 201, 240, 0.7);
+            border-top: 5px solid transparent;
+            border-bottom: 5px solid transparent;
+        }
+        .feature-item {
+            transition: all 0.3s;
+        }
+        .feature-item:hover {
+            transform: translateX(5px);
+        }
+    </style>
+</head>
+<body>
+    <div class="slide flex flex-col p-16">
+        <!-- Background elements -->
+        <div class="bg-shape rounded-full h-96 w-96 absolute -top-20 -right-20 bg-blue-400"></div>
+        <div class="bg-shape rounded-full h-64 w-64 absolute -bottom-10 -left-10 bg-teal-400"></div>
+        <div class="bg-shape h-40 w-40 absolute bottom-1/3 right-1/4 transform rotate-45 bg-blue-300"></div>
+
+        <!-- Main content -->
+        <div class="content w-full h-full flex flex-col">
+            <!-- Header -->
+            <div class="flex items-center mb-8">
+                <div class="w-12 h-12 rounded-full bg-gradient-to-r from-blue-400 to-teal-400 flex items-center justify-center mr-4">
+                    <i class="fas fa-rocket text-2xl text-white"></i>
+                </div>
+                <h1 class="text-4xl font-bold gradient-text">Deployment & CI/CD</h1>
+            </div>
+
+            <!-- CI/CD Section -->
+            <div class="grid grid-cols-12 gap-6 mb-6">
+                <!-- GitHub Actions -->
+                <div class="col-span-4 card p-5">
+                    <div class="flex items-center mb-3">
+                        <div class="w-10 h-10 rounded-full bg-gradient-to-r from-purple-500 to-blue-500 flex items-center justify-center mr-3">
+                            <i class="fab fa-github text-lg text-white"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold text-blue-300">GitHub Actions</h3>
+                    </div>
+
+                    <ul class="space-y-2">
+                        <li class="flex items-start feature-item">
+                            <i class="fas fa-check-circle text-blue-400 mt-1 mr-2"></i>
+                            <div>
+                                <span class="font-medium text-gray-200">Automates workflows</span>
+                                <p class="text-xs text-gray-400">Tests, builds & deploys with every push</p>
+                            </div>
+                        </li>
+                        <li class="flex items-start feature-item">
+                            <i class="fas fa-check-circle text-blue-400 mt-1 mr-2"></i>
+                            <div>
+                                <span class="font-medium text-gray-200">YML configuration</span>
+                                <p class="text-xs text-gray-400">Defined in <code>.github/workflows/</code></p>
+                            </div>
+                        </li>
+                        <li class="flex items-start feature-item">
+                            <i class="fas fa-check-circle text-blue-400 mt-1 mr-2"></i>
+                            <div>
+                                <span class="font-medium text-gray-200">Parallel jobs</span>
+                                <p class="text-xs text-gray-400">For front-end & back-end deployments</p>
+                            </div>
+                        </li>
+                    </ul>
+
+                    <div class="code-block mt-3 text-xs">
+<pre>name: Sarthi CI
+on: [push, pull_request]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Node
+        uses: actions/setup-node@v3
+      - run: npm ci
+      - run: npm test</pre>
+                    </div>
+                </div>
+
+                <!-- Environment Variables -->
+                <div class="col-span-4 card p-5">
+                    <div class="flex items-center mb-3">
+                        <div class="w-10 h-10 rounded-full bg-gradient-to-r from-green-500 to-teal-500 flex items-center justify-center mr-3">
+                            <i class="fas fa-key text-lg text-white"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold text-teal-300">Environment Variables</h3>
+                    </div>
+
+                    <ul class="space-y-2">
+                        <li class="flex items-start feature-item">
+                            <i class="fas fa-check-circle text-teal-400 mt-1 mr-2"></i>
+                            <div>
+                                <span class="font-medium text-gray-200">.env files</span>
+                                <p class="text-xs text-gray-400">Locally managed with dotenv package</p>
+                            </div>
+                        </li>
+                        <li class="flex items-start feature-item">
+                            <i class="fas fa-check-circle text-teal-400 mt-1 mr-2"></i>
+                            <div>
+                                <span class="font-medium text-gray-200">Secrets management</span>
+                                <p class="text-xs text-gray-400">Securely stored in deployment platforms</p>
+                            </div>
+                        </li>
+                        <li class="flex items-start feature-item">
+                            <i class="fas fa-check-circle text-teal-400 mt-1 mr-2"></i>
+                            <div>
+                                <span class="font-medium text-gray-200">Environment separation</span>
+                                <p class="text-xs text-gray-400">Dev vs. staging vs. production</p>
+                            </div>
+                        </li>
+                    </ul>
+
+                    <div class="code-block mt-3 text-xs">
+<pre># Sample .env file
+MONGODB_URI=mongodb+srv://...
+JWT_SECRET=your-secret-key
+PORT=3000
+NODE_ENV=production
+S3_BUCKET=sarthi-videos
+FFMPEG_PATH=/usr/bin/ffmpeg</pre>
+                    </div>
+                </div>
+
+                <!-- Continuous Deployment -->
+                <div class="col-span-4 card p-5">
+                    <div class="flex items-center mb-3">
+                        <div class="w-10 h-10 rounded-full bg-gradient-to-r from-orange-500 to-red-500 flex items-center justify-center mr-3">
+                            <i class="fas fa-sync-alt text-lg text-white"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold text-orange-300">Continuous Deployment</h3>
+                    </div>
+
+                    <ul class="space-y-2">
+                        <li class="flex items-start feature-item">
+                            <i class="fas fa-check-circle text-orange-400 mt-1 mr-2"></i>
+                            <div>
+                                <span class="font-medium text-gray-200">Automated releases</span>
+                                <p class="text-xs text-gray-400">Deploy on each merge to main branch</p>
+                            </div>
+                        </li>
+                        <li class="flex items-start feature-item">
+                            <i class="fas fa-check-circle text-orange-400 mt-1 mr-2"></i>
+                            <div>
+                                <span class="font-medium text-gray-200">Zero-downtime updates</span>
+                                <p class="text-xs text-gray-400">Using blue/green deployment strategy</p>
+                            </div>
+                        </li>
+                        <li class="flex items-start feature-item">
+                            <i class="fas fa-check-circle text-orange-400 mt-1 mr-2"></i>
+                            <div>
+                                <span class="font-medium text-gray-200">Rollback capability</span>
+                                <p class="text-xs text-gray-400">Quick recovery from failed deployments</p>
+                            </div>
+                        </li>
+                    </ul>
+
+                    <div class="flex items-center justify-center space-x-3 mt-4">
+                        <div class="flex flex-col items-center">
+                            <div class="w-12 h-12 rounded-full bg-gray-700 flex items-center justify-center mb-1">
+                                <i class="fas fa-code-branch text-orange-300"></i>
+                            </div>
+                            <span class="text-xs text-gray-400">Commit</span>
+                        </div>
+                        <i class="fas fa-arrow-right text-gray-500"></i>
+                        <div class="flex flex-col items-center">
+                            <div class="w-12 h-12 rounded-full bg-gray-700 flex items-center justify-center mb-1">
+                                <i class="fas fa-vial text-orange-300"></i>
+                            </div>
+                            <span class="text-xs text-gray-400">Test</span>
+                        </div>
+                        <i class="fas fa-arrow-right text-gray-500"></i>
+                        <div class="flex flex-col items-center">
+                            <div class="w-12 h-12 rounded-full bg-gray-700 flex items-center justify-center mb-1">
+                                <i class="fas fa-rocket text-orange-300"></i>
+                            </div>
+                            <span class="text-xs text-gray-400">Deploy</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Deployment Architecture -->
+            <h3 class="text-xl font-semibold text-center text-blue-200 mb-6">Deployment Architecture</h3>
+
+            <div class="relative flex justify-center space-x-6 mb-10">
+                <!-- Frontend -->
+                <div class="service-card relative z-10 w-56 bg-gradient-to-br from-blue-900/60 to-blue-800/30 p-4 rounded-lg border border-blue-500/30 shadow-lg flex flex-col items-center">
+                    <div class="service-icon w-16 h-16 rounded-full bg-gradient-to-r from-blue-400 to-teal-400 flex items-center justify-center mb-3">
+                        <i class="fab fa-react text-2xl text-white"></i>
+                    </div>
+                    <h4 class="text-lg font-semibold text-blue-300 mb-1">Frontend</h4>
+                    <p class="text-sm text-center text-gray-400 mb-3">React.js UI Components</p>
+                    <div class="flex flex-col items-center">
+                        <div class="flex space-x-2 mb-2">
+                            <div class="flex items-center bg-gray-800 rounded-full px-3 py-1">
+                                <i class="fab fa-netlify text-purple-400 mr-1 text-sm"></i>
+                                <span class="text-xs text-gray-300">Netlify</span>
+                            </div>
+                            <div class="flex items-center bg-gray-800 rounded-full px-3 py-1">
+                                <i class="fas fa-bolt text-blue-400 mr-1 text-sm"></i>
+                                <span class="text-xs text-gray-300">Vercel</span>
+                            </div>
+                        </div>
+                        <span class="text-xs text-gray-500">Static hosting with CI integration</span>
+                    </div>
+                </div>
+
+                <!-- Connect lines -->
+                <div class="deploy-arrow w-24 top-20 left-[278px]"></div>
+                <div class="deploy-arrow w-24 top-20 right-[278px]"></div>
+
+                <!-- Backend -->
+                <div class="service-card relative z-10 w-56 bg-gradient-to-br from-green-900/60 to-green-800/30 p-4 rounded-lg border border-green-500/30 shadow-lg flex flex-col items-center">
+                    <div class="service-icon w-16 h-16 rounded-full bg-gradient-to-r from-green-400 to-teal-400 flex items-center justify-center mb-3">
+                        <i class="fab fa-node-js text-2xl text-white"></i>
+                    </div>
+                    <h4 class="text-lg font-semibold text-green-300 mb-1">Backend</h4>
+                    <p class="text-sm text-center text-gray-400 mb-3">Express.js API Server</p>
+                    <div class="flex flex-col items-center">
+                        <div class="flex space-x-2 mb-2">
+                            <div class="flex items-center bg-gray-800 rounded-full px-3 py-1">
+                                <i class="fab fa-aws text-orange-300 mr-1 text-sm"></i>
+                                <span class="text-xs text-gray-300">EC2</span>
+                            </div>
+                            <div class="flex items-center bg-gray-800 rounded-full px-3 py-1">
+                                <i class="fas fa-server text-teal-400 mr-1 text-sm"></i>
+                                <span class="text-xs text-gray-300">Render</span>
+                            </div>
+                        </div>
+                        <span class="text-xs text-gray-500">Container-based deployment</span>
+                    </div>
+                </div>
+
+                <!-- Database -->
+                <div class="service-card relative z-10 w-56 bg-gradient-to-br from-yellow-900/60 to-yellow-800/30 p-4 rounded-lg border border-yellow-500/30 shadow-lg flex flex-col items-center">
+                    <div class="service-icon w-16 h-16 rounded-full bg-gradient-to-r from-yellow-400 to-orange-400 flex items-center justify-center mb-3">
+                        <i class="fas fa-database text-2xl text-white"></i>
+                    </div>
+                    <h4 class="text-lg font-semibold text-yellow-300 mb-1">Database</h4>
+                    <p class="text-sm text-center text-gray-400 mb-3">MongoDB Document Storage</p>
+                    <div class="flex flex-col items-center">
+                        <div class="flex space-x-2 mb-2">
+                            <div class="flex items-center bg-gray-800 rounded-full px-3 py-1">
+                                <i class="fas fa-leaf text-green-400 mr-1 text-sm"></i>
+                                <span class="text-xs text-gray-300">MongoDB Atlas</span>
+                            </div>
+                        </div>
+                        <span class="text-xs text-gray-500">Cloud database service</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Video Storage Options -->
+            <div class="grid grid-cols-2 gap-6">
+                <!-- Local Storage -->
+                <div class="card p-5">
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="flex items-center">
+                            <div class="w-10 h-10 rounded-full bg-gradient-to-r from-indigo-500 to-purple-500 flex items-center justify-center mr-3">
+                                <i class="fas fa-hdd text-lg text-white"></i>
+                            </div>
+                            <h3 class="text-xl font-semibold text-indigo-300">Local Storage</h3>
+                        </div>
+                        <span class="px-2 py-1 bg-indigo-900/50 text-indigo-300 rounded-full text-xs">Development</span>
+                    </div>
+
+                    <ul class="space-y-2">
+                        <li class="flex items-start feature-item">
+                            <i class="fas fa-plus-circle text-indigo-400 mt-1 mr-2"></i>
+                            <div>
+                                <span class="font-medium text-gray-200">Simple setup</span>
+                                <p class="text-xs text-gray-400">Direct file system access</p>
+                            </div>
+                        </li>
+                        <li class="flex items-start feature-item">
+                            <i class="fas fa-plus-circle text-indigo-400 mt-1 mr-2"></i>
+                            <div>
+                                <span class="font-medium text-gray-200">Fast processing</span>
+                                <p class="text-xs text-gray-400">FFMPEG has direct disk access</p>
+                            </div>
+                        </li>
+                        <li class="flex items-start feature-item">
+                            <i class="fas fa-minus-circle text-red-400 mt-1 mr-2"></i>
+                            <div>
+                                <span class="font-medium text-gray-200">Limited scalability</span>
+                                <p class="text-xs text-gray-400">Disk space & bandwidth constraints</p>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Cloud Storage -->
+                <div class="card p-5">
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="flex items-center">
+                            <div class="w-10 h-10 rounded-full bg-gradient-to-r from-blue-500 to-cyan-500 flex items-center justify-center mr-3">
+                                <i class="fas fa-cloud text-lg text-white"></i>
+                            </div>
+                            <h3 class="text-xl font-semibold text-blue-300">Cloud Storage (S3)</h3>
+                        </div>
+                        <span class="px-2 py-1 bg-blue-900/50 text-blue-300 rounded-full text-xs">Production</span>
+                    </div>
+
+                    <ul class="space-y-2">
+                        <li class="flex items-start feature-item">
+                            <i class="fas fa-plus-circle text-blue-400 mt-1 mr-2"></i>
+                            <div>
+                                <span class="font-medium text-gray-200">Infinite scalability</span>
+                                <p class="text-xs text-gray-400">Unlimited storage capacity</p>
+                            </div>
+                        </li>
+                        <li class="flex items-start feature-item">
+                            <i class="fas fa-plus-circle text-blue-400 mt-1 mr-2"></i>
+                            <div>
+                                <span class="font-medium text-gray-200">CDN integration</span>
+                                <p class="text-xs text-gray-400">Low latency global delivery</p>
+                            </div>
+                        </li>
+                        <li class="flex items-start feature-item">
+                            <i class="fas fa-minus-circle text-red-400 mt-1 mr-2"></i>
+                            <div>
+                                <span class="font-medium text-gray-200">More complex setup</span>
+                                <p class="text-xs text-gray-400">Requires AWS SDK & IAM permissions</p>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Slide number -->
+            <div class="absolute bottom-6 right-6 text-gray-400 text-sm">
+                11/12
+            </div>
+        </div>
+    </div>
+</body>
+</html>

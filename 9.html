@@ -1,0 +1,552 @@
+<html lang="en"><head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Handling Concurrency and Encoding Load - Sarthi</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4efe9 100%);
+        }
+        .slide {
+            width: 1280px;
+            min-height: 720px;
+            overflow: hidden;
+            position: relative;
+            background: linear-gradient(135deg, #2C3E50 0%, #203A43 100%);
+            color: white;
+        }
+        .gradient-text {
+            background: linear-gradient(90deg, #4CC9F0, #4895EF, #4361EE);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        .bg-shape {
+            position: absolute;
+            opacity: 0.05;
+            z-index: 0;
+        }
+        .content {
+            position: relative;
+            z-index: 10;
+        }
+        .code-block {
+            background: rgba(0, 0, 0, 0.3);
+            border-left: 3px solid #4CC9F0;
+            border-radius: 6px;
+            font-family: 'Courier New', monospace;
+            padding: 12px;
+            font-size: 13px;
+            overflow-x: auto;
+        }
+        .solution-card {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            backdrop-filter: blur(5px);
+            transition: all 0.3s ease;
+        }
+        .solution-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+        }
+        .cpu-bar {
+            height: 24px;
+            background: linear-gradient(90deg, #4CC9F0, #4361EE);
+            border-radius: 4px;
+            transition: width 1s ease;
+        }
+        .process-node {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(76, 201, 240, 0.2);
+            border: 2px solid #4CC9F0;
+        }
+        .process-arrow {
+            width: 80px;
+            height: 2px;
+            background: #4CC9F0;
+            position: relative;
+        }
+        .process-arrow::after {
+            content: '';
+            position: absolute;
+            right: 0;
+            top: -4px;
+            width: 0;
+            height: 0;
+            border-left: 8px solid #4CC9F0;
+            border-top: 5px solid transparent;
+            border-bottom: 5px solid transparent;
+        }
+    </style>
+<style>
+    .genspark-badge-button {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background-color: #333;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      padding: 8px 12px;
+      font-size: 12px;
+      cursor: pointer;
+      z-index: 9999;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .genspark-modal {
+      display: none;
+      position: fixed;
+      bottom: 80px;
+      right: 20px;
+      z-index: 10000;
+      justify-content: end;
+    }
+
+    .genspark-modal-content {
+      background-color: white;
+      border-radius: 8px;
+      max-width: 450px;
+      width: 100%;
+      box-sizing: border-box;
+      padding: 20px;
+      position: relative;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      font-size: 14px;
+    }
+    @media (max-width: 768px) {
+      .genspark-modal-content {
+        max-width: 90%;
+      }
+    }
+
+    .genspark-close {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      font-size: 20px;
+      cursor: pointer;
+      background: none;
+      border: none;
+    }
+
+    .genspark-title {
+      margin-bottom: 8px;
+      font-weight: normal;
+      display: inline;
+      font-size: 14px;
+    }
+
+    .genspark-report {
+      color: #909499;
+      text-decoration: underline;
+      cursor: pointer;
+      margin-bottom: 14px;
+      display: inline;
+    }
+
+    .genspark-info {
+      margin: 25px 0;
+      color: #333;
+      font-size: 14px;
+    }
+
+    .genspark-buttons {
+      display: flex;
+      gap: 10px;
+    }
+
+    .genspark-remove-btn {
+      background-color: #f5f5f5;
+      border: 1px solid #ddd;
+      color: #333;
+      padding: 4px 14px;
+      border-radius: 8px;
+      cursor: pointer;
+      flex: 1;
+      font-size: 14px;
+      box-sizing: border-box;
+    }
+
+    .genspark-go-btn {
+      background-color: #222;
+      border: none;
+      color: white;
+      padding: 4px 14px;
+      border-radius: 8px;
+      cursor: pointer;
+      flex: 1;
+      font-size: 14px;
+      box-sizing: border-box;
+    }
+  </style><script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script></head>
+<body>
+    <div class="slide flex flex-col p-16">
+        <!-- Background elements -->
+        <div class="bg-shape rounded-full h-96 w-96 absolute -top-20 -right-20 bg-blue-400"></div>
+        <div class="bg-shape rounded-full h-64 w-64 absolute -bottom-10 -left-10 bg-teal-400"></div>
+        <div class="bg-shape h-40 w-40 absolute bottom-1/3 right-1/4 transform rotate-45 bg-blue-300"></div>
+
+        <!-- Main content -->
+        <div class="content w-full h-full flex flex-col">
+            <!-- Header -->
+            <div class="flex items-center mb-8">
+                <div class="w-12 h-12 rounded-full bg-gradient-to-r from-blue-400 to-teal-400 flex items-center justify-center mr-4">
+                    <i class="fas fa-microchip text-2xl text-white"></i>
+                </div>
+                <h1 class="text-4xl font-bold gradient-text">Handling Concurrency and Encoding Load</h1>
+                <span class="ml-3 bg-gradient-to-r from-pink-500 to-purple-500 text-white text-sm rounded-full px-3 py-1">Hard Topic #3</span>
+            </div>
+
+            <!-- CPU Load Visualization -->
+            <div class="mb-8">
+                <div class="flex items-center justify-between mb-3">
+                    <h2 class="text-xl font-semibold text-blue-300">CPU Intensity of Video Processing</h2>
+                    <div class="flex items-center">
+                        <div class="w-4 h-4 rounded-full bg-red-400 mr-1"></div>
+                        <span class="text-sm text-red-300 mr-4">High Load</span>
+                        <div class="w-4 h-4 rounded-full bg-yellow-400 mr-1"></div>
+                        <span class="text-sm text-yellow-300 mr-4">Medium Load</span>
+                        <div class="w-4 h-4 rounded-full bg-green-400 mr-1"></div>
+                        <span class="text-sm text-green-300">Normal Load</span>
+                    </div>
+                </div>
+                <div class="bg-gray-800 rounded-lg p-5">
+                    <div class="grid grid-cols-2 gap-8">
+                        <div>
+                            <div class="mb-4">
+                                <div class="flex justify-between mb-1">
+                                    <span class="text-sm text-gray-300">Standard Web Request</span>
+                                    <span class="text-sm text-gray-300">~50ms</span>
+                                </div>
+                                <div class="w-full bg-gray-700 rounded-full h-4">
+                                    <div class="cpu-bar" style="width: 5%"></div>
+                                </div>
+                            </div>
+                            <div class="mb-4">
+                                <div class="flex justify-between mb-1">
+                                    <span class="text-sm text-gray-300">Database Query</span>
+                                    <span class="text-sm text-gray-300">~200ms</span>
+                                </div>
+                                <div class="w-full bg-gray-700 rounded-full h-4">
+                                    <div class="cpu-bar" style="width: 15%"></div>
+                                </div>
+                            </div>
+                            <div class="mb-4">
+                                <div class="flex justify-between mb-1">
+                                    <span class="text-sm text-gray-300">Image Processing</span>
+                                    <span class="text-sm text-gray-300">~1-2s</span>
+                                </div>
+                                <div class="w-full bg-gray-700 rounded-full h-4">
+                                    <div class="cpu-bar" style="width: 40%; background: linear-gradient(90deg, #FCD34D, #F59E0B);"></div>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="flex justify-between mb-1">
+                                    <span class="text-sm font-medium text-red-300">Video Transcoding (1080p)</span>
+                                    <span class="text-sm font-medium text-red-300">30s - 5min+</span>
+                                </div>
+                                <div class="w-full bg-gray-700 rounded-full h-4">
+                                    <div class="cpu-bar" style="width: 95%; background: linear-gradient(90deg, #F87171, #EF4444);"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="flex flex-col justify-center">
+                            <div class="bg-red-900/20 border border-red-500/30 rounded-lg p-4 mb-4">
+                                <h3 class="text-lg font-medium text-red-400 mb-2">The Challenge</h3>
+                                <ul class="space-y-2 text-sm">
+                                    <li class="flex items-start">
+                                        <i class="fas fa-exclamation-triangle text-red-500 mt-1 mr-2"></i>
+                                        <span>FFMPEG operations can take <span class="font-semibold text-red-300">30+ seconds</span> for large files</span>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <i class="fas fa-exclamation-triangle text-red-500 mt-1 mr-2"></i>
+                                        <span>Node.js is <span class="font-semibold text-red-300">single-threaded</span>: CPU-intensive tasks block the event loop</span>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <i class="fas fa-exclamation-triangle text-red-500 mt-1 mr-2"></i>
+                                        <span>Blocked event loop means <span class="font-semibold text-red-300">no other requests</span> can be processed</span>
+                                    </li>
+                                </ul>
+                            </div>
+
+                            <div class="p-4 bg-gradient-to-r from-blue-900/30 to-blue-800/10 rounded-lg">
+                                <div class="flex items-center">
+                                    <i class="fas fa-lightbulb text-2xl text-yellow-400 mr-3"></i>
+                                    <div>
+                                        <h3 class="text-lg font-medium text-blue-300">Without Proper Handling</h3>
+                                        <p class="text-sm text-gray-300">Your server becomes unresponsive during video processing</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
+            </div>
+
+            <!-- Solutions Section -->
+            <div class="grid grid-cols-2 gap-8">
+                <!-- Left column - Child Process -->
+                <div class="solution-card p-5">
+                    <div class="flex items-center mb-4">
+                        <div class="w-10 h-10 rounded-full bg-gradient-to-r from-blue-500 to-teal-500 flex items-center justify-center mr-3">
+                            <i class="fas fa-code-branch text-lg text-white"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold text-blue-300">Solution 1: Child Process</h3>
+                    </div>
+
+                    <div class="mb-4 bg-black/30 p-3 rounded-lg">
+                        <div class="flex items-center mb-2">
+                            <i class="fas fa-check-circle text-green-400 mr-2"></i>
+                            <span class="font-medium text-green-300">Non-blocking with child_process</span>
+                        </div>
+
+                        <div class="code-block text-gray-300">
+                            <pre>// ffmpegService.js
+const { spawn } = require('child_process');
+
+exports.convertToHLS = (inputPath, outputDir) =&gt; {
+  return new Promise((resolve, reject) =&gt; {
+    const ffmpeg = spawn('ffmpeg', [
+      '-i', inputPath,
+      '-profile:v', 'baseline',
+      '-level', '3.0',
+      '-start_number', '0',
+      '-hls_time', '10',
+      '-hls_list_size', '0',
+      '-f', 'hls',
+      `${outputDir}/index.m3u8`
+    ]);
+
+    ffmpeg.on('close', (code) =&gt; {
+      if (code === 0) {
+        resolve();
+      } else {
+        reject(new Error(`FFMPEG exited with code ${code}`));
+      }
+    });
+  });
+};</pre>
+                        </div>
+                    </div>
+
+                    <div class="flex items-center justify-center mb-4">
+                        <div class="process-node">
+                            <i class="fas fa-server text-blue-400"></i>
+                        </div>
+                        <div class="process-arrow"></div>
+                        <div class="process-node">
+                            <i class="fas fa-cogs text-teal-400"></i>
+                        </div>
+                    </div>
+
+                    <div class="bg-blue-900/20 p-3 rounded-lg">
+                        <h4 class="text-sm font-medium text-blue-300 mb-2">Benefits</h4>
+                        <ul class="text-sm space-y-1">
+                            <li class="flex items-start">
+                                <i class="fas fa-check-circle text-green-400 mt-0.5 mr-2 text-xs"></i>
+                                <span>Creates a separate process outside Node's event loop</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-check-circle text-green-400 mt-0.5 mr-2 text-xs"></i>
+                                <span>Server remains responsive to other requests</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-check-circle text-green-400 mt-0.5 mr-2 text-xs"></i>
+                                <span>Built into Node.js - no additional dependencies</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Right column - Job Queue -->
+                <div class="solution-card p-5">
+                    <div class="flex items-center mb-4">
+                        <div class="w-10 h-10 rounded-full bg-gradient-to-r from-purple-500 to-pink-500 flex items-center justify-center mr-3">
+                            <i class="fas fa-tasks text-lg text-white"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold text-purple-300">Solution 2: Job Queue</h3>
+                    </div>
+
+                    <div class="mb-4 bg-black/30 p-3 rounded-lg">
+                        <div class="flex items-center mb-2">
+                            <i class="fas fa-check-circle text-green-400 mr-2"></i>
+                            <span class="font-medium text-green-300">Scalable job processing with Bull + Redis</span>
+                        </div>
+
+                        <div class="code-block text-gray-300">
+                            <pre>// videoQueue.js
+const Queue = require('bull');
+const ffmpegService = require('./ffmpegService');
+
+// Create processing queue with Redis
+const videoQueue = new Queue('video-processing', {
+  redis: {
+    host: process.env.REDIS_HOST,
+    port: process.env.REDIS_PORT
+  }
+});
+
+// Process jobs in the queue
+videoQueue.process(async (job) =&gt; {
+  const { videoId, inputPath, outputDir } = job.data;
+
+  // Update status to "processing"
+  await Video.findByIdAndUpdate(videoId, { status: 'processing' });
+
+  // Run FFMPEG conversion
+  await ffmpegService.convertToHLS(inputPath, outputDir);
+
+  // Update status to "completed"
+  await Video.findByIdAndUpdate(videoId, { status: 'completed' });
+
+  return { videoId, success: true };
+});</pre>
+                        </div>
+                    </div>
+
+                    <div class="flex justify-center items-center mb-4">
+                        <div class="flex flex-col items-center">
+                            <div class="flex mb-2">
+                                <div class="w-12 h-6 bg-purple-500/30 rounded-md mx-1"></div>
+                                <div class="w-12 h-6 bg-purple-500/30 rounded-md mx-1"></div>
+                                <div class="w-12 h-6 bg-purple-500/30 rounded-md mx-1"></div>
+                            </div>
+                            <div class="text-xs text-purple-300">Job Queue</div>
+                        </div>
+                        <i class="fas fa-arrow-right text-gray-400 mx-4"></i>
+                        <div class="flex flex-col items-center">
+                            <div class="w-12 h-12 rounded-lg bg-red-500/30 flex items-center justify-center">
+                                <i class="fas fa-database text-red-400"></i>
+                            </div>
+                            <div class="text-xs text-red-300 mt-1">Redis</div>
+                        </div>
+                        <i class="fas fa-arrow-right text-gray-400 mx-4"></i>
+                        <div class="flex flex-col items-center">
+                            <div class="flex">
+                                <div class="w-10 h-10 rounded-full bg-green-500/30 flex items-center justify-center mx-1">
+                                    <i class="fas fa-cog text-green-400"></i>
+                                </div>
+                                <div class="w-10 h-10 rounded-full bg-green-500/30 flex items-center justify-center mx-1">
+                                    <i class="fas fa-cog text-green-400"></i>
+                                </div>
+                            </div>
+                            <div class="text-xs text-green-300 mt-1">Workers</div>
+                        </div>
+                    </div>
+
+                    <div class="bg-purple-900/20 p-3 rounded-lg">
+                        <h4 class="text-sm font-medium text-purple-300 mb-2">Advanced Benefits</h4>
+                        <ul class="text-sm space-y-1">
+                            <li class="flex items-start">
+                                <i class="fas fa-check-circle text-green-400 mt-0.5 mr-2 text-xs"></i>
+                                <span>Horizontally scalable across multiple servers</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-check-circle text-green-400 mt-0.5 mr-2 text-xs"></i>
+                                <span>Automatic retries and job prioritization</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-check-circle text-green-400 mt-0.5 mr-2 text-xs"></i>
+                                <span>Progress tracking and status monitoring</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-check-circle text-green-400 mt-0.5 mr-2 text-xs"></i>
+                                <span>Rate limiting to prevent server overload</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slide number -->
+            <div class="absolute bottom-6 right-6 text-gray-400 text-sm">
+                9/12
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Initialize CPU load chart
+        const ctx = document.getElementById('cpuLoadChart').getContext('2d');
+        const cpuLoadChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: ['While Idle', 'API Request', 'Database Query', 'File Upload', 'Video Processing'],
+                datasets: [{
+                    label: 'CPU Load %',
+                    data: [5, 15, 30, 45, 95],
+                    backgroundColor: [
+                        'rgba(72, 187, 120, 0.7)', // green
+                        'rgba(72, 187, 120, 0.7)', // green
+                        'rgba(246, 173, 85, 0.7)', // yellow
+                        'rgba(246, 173, 85, 0.7)', // yellow
+                        'rgba(245, 101, 101, 0.7)'  // red
+                    ],
+                    borderColor: [
+                        'rgb(72, 187, 120)',
+                        'rgb(72, 187, 120)',
+                        'rgb(246, 173, 85)',
+                        'rgb(246, 173, 85)',
+                        'rgb(245, 101, 101)'
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        max: 100,
+                        ticks: {
+                            color: 'rgba(255, 255, 255, 0.7)'
+                        },
+                        grid: {
+                            color: 'rgba(255, 255, 255, 0.1)'
+                        }
+                    },
+                    x: {
+                        ticks: {
+                            color: 'rgba(255, 255, 255, 0.7)'
+                        },
+                        grid: {
+                            color: 'rgba(255, 255, 255, 0.1)'
+                        }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        display: false
+                    }
+                }
+            }
+        });
+    </script>
+
+<script src="https://www.genspark.ai/slide-inner.js?_v=1"></script>
+    <script id="html_badge_script1">
+        window.__genspark_remove_badge_link = "https://www.genspark.ai/api/html_badge/" +
+            "remove_badge?token=To%2FBnjzloZ3UfQdcSaYfDs53d%2FiuUnJzw8ExQNJOegNUihT3r%2BiELY7dL9esJJMojgnIDiBtPkgX8OjQdz7rOwdYmvvyjvZMtrjCfBlb6aEfnFTI8nKCCZCFVGfP0AjgD01LT0dppoP1rxQgc9kdSq8BWQn%2FDLH6p0Hj8WkbnvXG5TuQzHuieS1NdvQ%2BK%2BXatG3sFBSH9ZV266KO6TA5tpsFKzK4smkvuUwIbM1UGJxo7XB24nMkhiaQo2qgXlC%2BBJzgk%2FATtNKtlsf0IZcYfTnLOCQkvkCxcEJtzLWVgX5BQ%2BDZxi8R2DsndE3%2FB3GS8yQrkptwMkHnx2dha5jD5VwH72%2FO0pUNozIJ2UFNZ8G8oH%2BdMpvOe80jyLTTnwKwasmyX3MOZVohqX%2Bs9%2B2o01r7%2F136e%2B0Vl7QleNe1NYEbrZ8VgzkVzg%2FdPEWHDxPhCCcMXJKTsS5tOZFjbpl9HgsAd44ox6t886Joq6sgyqIA5fMKtOuXeeDLQKsVN4SHGuoBl19FhUXn%2FAt%2Ff7r4MOaPqQuuJBkhsSkP%2FY8uqCWcRsTcYh5KlcD8sSEeG%2F6f4LBllBXObZSfoI7NsHpq2xdDA7gUDBqIngDa2l0cc%2F%2Bzh%2FBNASOe4MtSMbptgx0OMRPXEHU2YkyJy%2FhmD2l4rYFfyppxHaRAfxORbHrMrsSjmv7jrPFk3L8%2BKOmzafxX3PYGEZ1rr4uQafES67om77BAoeXNCgpb1e1WI020yJWBRhSImAP6diQSE7jhXlOw";
+        window.__genspark_locale = "en-US";
+        window.__genspark_token = "To/BnjzloZ3UfQdcSaYfDs53d/iuUnJzw8ExQNJOegNUihT3r+iELY7dL9esJJMojgnIDiBtPkgX8OjQdz7rOwdYmvvyjvZMtrjCfBlb6aEfnFTI8nKCCZCFVGfP0AjgD01LT0dppoP1rxQgc9kdSq8BWQn/DLH6p0Hj8WkbnvXG5TuQzHuieS1NdvQ+K+XatG3sFBSH9ZV266KO6TA5tpsFKzK4smkvuUwIbM1UGJxo7XB24nMkhiaQo2qgXlC+BJzgk/ATtNKtlsf0IZcYfTnLOCQkvkCxcEJtzLWVgX5BQ+DZxi8R2DsndE3/B3GS8yQrkptwMkHnx2dha5jD5VwH72/O0pUNozIJ2UFNZ8G8oH+dMpvOe80jyLTTnwKwasmyX3MOZVohqX+s9+2o01r7/136e+0Vl7QleNe1NYEbrZ8VgzkVzg/dPEWHDxPhCCcMXJKTsS5tOZFjbpl9HgsAd44ox6t886Joq6sgyqIA5fMKtOuXeeDLQKsVN4SHGuoBl19FhUXn/At/f7r4MOaPqQuuJBkhsSkP/Y8uqCWcRsTcYh5KlcD8sSEeG/6f4LBllBXObZSfoI7NsHpq2xdDA7gUDBqIngDa2l0cc/+zh/BNASOe4MtSMbptgx0OMRPXEHU2YkyJy/hmD2l4rYFfyppxHaRAfxORbHrMrsSjmv7jrPFk3L8+KOmzafxX3PYGEZ1rr4uQafES67om77BAoeXNCgpb1e1WI020yJWBRhSImAP6diQSE7jhXlOw";
+    </script>
+
+        <script id="html_badge_script2" src="https://www.genspark.ai/html_badge.js"></script>
+        </body></html>

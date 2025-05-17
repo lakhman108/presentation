@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Database Design Tradeoffs - Sarthi</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4efe9 100%);
+        }
+        .slide {
+            width: 1280px;
+            min-height: 720px;
+            overflow: hidden;
+            position: relative;
+            background: linear-gradient(135deg, #2C3E50 0%, #203A43 100%);
+            color: white;
+        }
+        .gradient-text {
+            background: linear-gradient(90deg, #4CC9F0, #4895EF, #4361EE);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        .bg-shape {
+            position: absolute;
+            opacity: 0.05;
+            z-index: 0;
+        }
+        .content {
+            position: relative;
+            z-index: 10;
+        }
+        .code-block {
+            background: rgba(0, 0, 0, 0.3);
+            border-left: 3px solid #4CC9F0;
+            border-radius: 6px;
+            font-family: 'Courier New', monospace;
+            padding: 12px;
+            font-size: 14px;
+            overflow-x: auto;
+        }
+        .card {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            backdrop-filter: blur(5px);
+            transition: all 0.3s ease;
+        }
+        .card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+        }
+        .feature-item {
+            transition: all 0.3s;
+        }
+        .feature-item:hover {
+            transform: translateX(5px);
+        }
+        .db-icon {
+            filter: drop-shadow(0 0 8px rgba(76, 201, 240, 0.5));
+        }
+        .vs-line {
+            height: 200px;
+            width: 2px;
+            background: linear-gradient(to bottom, rgba(255,255,255,0), rgba(255,255,255,0.5), rgba(255,255,255,0));
+        }
+    </style>
+</head>
+<body>
+    <div class="slide flex flex-col p-16">
+        <!-- Background elements -->
+        <div class="bg-shape rounded-full h-96 w-96 absolute -top-20 -right-20 bg-blue-400"></div>
+        <div class="bg-shape rounded-full h-64 w-64 absolute -bottom-10 -left-10 bg-teal-400"></div>
+        <div class="bg-shape h-40 w-40 absolute bottom-1/3 right-1/4 transform rotate-45 bg-blue-300"></div>
+
+        <!-- Main content -->
+        <div class="content w-full h-full flex flex-col">
+            <!-- Header -->
+            <div class="flex items-center mb-10">
+                <div class="w-12 h-12 rounded-full bg-gradient-to-r from-blue-400 to-teal-400 flex items-center justify-center mr-4">
+                    <i class="fas fa-database text-2xl text-white"></i>
+                </div>
+                <h1 class="text-4xl font-bold gradient-text">Database Design Tradeoffs</h1>
+            </div>
+
+            <div class="grid grid-cols-12 gap-6 mb-8">
+                <!-- MongoDB Logo Section -->
+                <div class="col-span-3 flex flex-col items-center justify-start">
+                    <div class="w-32 h-32 rounded-full bg-white p-4 flex items-center justify-center mb-4">
+                        <i class="fas fa-leaf text-6xl db-icon" style="color: #4DB33D;"></i>
+                    </div>
+                    <h2 class="text-xl font-bold text-center text-teal-300 mb-2">MongoDB</h2>
+                    <div class="text-center">
+                        <span class="inline-block bg-teal-800/50 rounded-full px-3 py-1 text-sm text-teal-300 mb-2">NoSQL</span>
+                        <span class="inline-block bg-teal-800/50 rounded-full px-3 py-1 text-sm text-teal-300">Document DB</span>
+                    </div>
+                </div>
+
+                <!-- Diagram -->
+                <div class="col-span-6 flex flex-col items-center justify-center">
+                    <div class="relative w-full h-64 mb-4">
+                        <!-- Document Model Animation -->
+                        <div class="absolute top-0 left-1/2 transform -translate-x-1/2 w-64 p-4 bg-gradient-to-br from-blue-900/40 to-blue-800/20 rounded-lg border border-blue-500/30 shadow-lg">
+                            <div class="text-blue-300 text-xs font-mono">
+                                <span class="text-blue-400 mb-2 block font-semibold">// Video document in MongoDB</span>
+                                {<br>
+                                &nbsp;&nbsp;"_id": "60d21b4667d0d8992e610c85",<br>
+                                &nbsp;&nbsp;"title": "Introduction to MongoDB",<br>
+                                &nbsp;&nbsp;"uploaderId": "60d21b...",<br>
+                                &nbsp;&nbsp;"originalPath": "/uploads/video123.mp4",<br>
+                                &nbsp;&nbsp;"streamPath": "/streams/video123/",<br>
+                                &nbsp;&nbsp;"duration": 320,<br>
+                                &nbsp;&nbsp;"createdAt": "2023-01-15T..."<br>
+                                }
+                            </div>
+                        </div>
+
+                        <!-- SQL Relational model -->
+                        <div class="absolute bottom-0 left-0 w-56 p-3 bg-gradient-to-br from-gray-700/40 to-gray-800/20 rounded-lg border border-gray-500/30 shadow-lg">
+                            <div class="text-gray-300 text-xs font-mono">
+                                <span class="text-gray-400 mb-1 block font-semibold">// SQL alternative</span>
+                                <span class="text-green-400">TABLE</span> videos (<br>
+                                &nbsp;&nbsp;id <span class="text-yellow-400">INT</span>,<br>
+                                &nbsp;&nbsp;title <span class="text-yellow-400">VARCHAR</span>,<br>
+                                &nbsp;&nbsp;uploader_id <span class="text-yellow-400">INT</span>,<br>
+                                &nbsp;&nbsp;...<br>
+                                )
+                            </div>
+                        </div>
+
+                        <!-- Mongoose Model -->
+                        <div class="absolute bottom-0 right-0 w-56 p-3 bg-gradient-to-br from-blue-700/40 to-blue-800/20 rounded-lg border border-blue-500/30 shadow-lg">
+                            <div class="text-blue-300 text-xs font-mono">
+                                <span class="text-blue-400 mb-1 block font-semibold">// Mongoose Schema</span>
+                                <span class="text-green-400">const</span> VideoSchema = <span class="text-yellow-400">new</span> Schema({<br>
+                                &nbsp;&nbsp;title: <span class="text-yellow-400">String</span>,<br>
+                                &nbsp;&nbsp;uploaderId: {<br>
+                                &nbsp;&nbsp;&nbsp;&nbsp;type: Schema.Types.ObjectId,<br>
+                                &nbsp;&nbsp;&nbsp;&nbsp;ref: <span class="text-green-400">'User'</span><br>
+                                &nbsp;&nbsp;},<br>
+                                &nbsp;&nbsp;...<br>
+                                });
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Mongoose Populate -->
+                    <div class="w-full p-4 bg-black/30 rounded-lg">
+                        <div class="code-block text-gray-300">
+                            <pre><span class="text-blue-400">// Using Mongoose to join data across collections</span>
+await Video.findById(videoId)
+  .populate('uploaderId')  <span class="text-green-400">// Replace ID with actual user data</span>
+  .populate({
+    path: 'comments',
+    populate: {
+      path: 'userId',  <span class="text-green-400">// Nested populate for comments</span>
+      select: 'name avatar'
+    }
+  });</pre>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right section with SQL comparison -->
+                <div class="col-span-3 flex flex-col items-center justify-start">
+                    <div class="w-32 h-32 rounded-full bg-white p-4 flex items-center justify-center mb-4">
+                        <i class="fas fa-table text-6xl db-icon" style="color: #F29111;"></i>
+                    </div>
+                    <h2 class="text-xl font-bold text-center text-yellow-300 mb-2">SQL</h2>
+                    <div class="text-center">
+                        <span class="inline-block bg-yellow-800/50 rounded-full px-3 py-1 text-sm text-yellow-300 mb-2">Relational</span>
+                        <span class="inline-block bg-yellow-800/50 rounded-full px-3 py-1 text-sm text-yellow-300">Strong Schema</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Pros and Cons -->
+            <div class="grid grid-cols-2 gap-8 mt-auto">
+                <!-- Pros -->
+                <div class="card p-5">
+                    <div class="flex items-center mb-4">
+                        <div class="w-10 h-10 rounded-full bg-gradient-to-r from-green-500 to-teal-500 flex items-center justify-center mr-3">
+                            <i class="fas fa-thumbs-up text-lg text-white"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold text-green-300">MongoDB Advantages</h3>
+                    </div>
+
+                    <ul class="space-y-3">
+                        <li class="flex items-start feature-item">
+                            <div class="w-8 h-8 rounded-full bg-green-500/20 flex items-center justify-center mr-3 mt-0.5">
+                                <i class="fas fa-bezier-curve text-green-400"></i>
+                            </div>
+                            <div>
+                                <span class="font-medium text-green-300">Flexible Schema</span>
+                                <p class="text-sm text-gray-300">Easy to evolve data model without migrations</p>
+                            </div>
+                        </li>
+                        <li class="flex items-start feature-item">
+                            <div class="w-8 h-8 rounded-full bg-green-500/20 flex items-center justify-center mr-3 mt-0.5">
+                                <i class="fas fa-exchange-alt text-green-400"></i>
+                            </div>
+                            <div>
+                                <span class="font-medium text-green-300">JSON Mapping</span>
+                                <p class="text-sm text-gray-300">Direct mapping between application objects and DB documents</p>
+                            </div>
+                        </li>
+                        <li class="flex items-start feature-item">
+                            <div class="w-8 h-8 rounded-full bg-green-500/20 flex items-center justify-center mr-3 mt-0.5">
+                                <i class="fas fa-bolt text-green-400"></i>
+                            </div>
+                            <div>
+                                <span class="font-medium text-green-300">Query Performance</span>
+                                <p class="text-sm text-gray-300">Optimized for document operations and nested data</p>
+                            </div>
+                        </li>
+                        <li class="flex items-start feature-item">
+                            <div class="w-8 h-8 rounded-full bg-green-500/20 flex items-center justify-center mr-3 mt-0.5">
+                                <i class="fas fa-expand-arrows-alt text-green-400"></i>
+                            </div>
+                            <div>
+                                <span class="font-medium text-green-300">Scalability</span>
+                                <p class="text-sm text-gray-300">Horizontal scaling with sharding for large datasets</p>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Challenges -->
+                <div class="card p-5">
+                    <div class="flex items-center mb-4">
+                        <div class="w-10 h-10 rounded-full bg-gradient-to-r from-orange-500 to-red-500 flex items-center justify-center mr-3">
+                            <i class="fas fa-exclamation-triangle text-lg text-white"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold text-orange-300">MongoDB Challenges</h3>
+                    </div>
+
+                    <ul class="space-y-3">
+                        <li class="flex items-start feature-item">
+                            <div class="w-8 h-8 rounded-full bg-orange-500/20 flex items-center justify-center mr-3 mt-0.5">
+                                <i class="fas fa-project-diagram text-orange-400"></i>
+                            </div>
+                            <div>
+                                <span class="font-medium text-orange-300">Complex Relations</span>
+                                <p class="text-sm text-gray-300">Referencing data across collections requires careful planning</p>
+                            </div>
+                        </li>
+                        <li class="flex items-start feature-item">
+                            <div class="w-8 h-8 rounded-full bg-orange-500/20 flex items-center justify-center mr-3 mt-0.5">
+                                <i class="fas fa-link text-orange-400"></i>
+                            </div>
+                            <div>
+                                <span class="font-medium text-orange-300">No True Joins</span>
+                                <p class="text-sm text-gray-300">Must use <code class="text-yellow-300">populate()</code> in Mongoose as a workaround</p>
+                            </div>
+                        </li>
+                        <li class="flex items-start feature-item">
+                            <div class="w-8 h-8 rounded-full bg-orange-500/20 flex items-center justify-center mr-3 mt-0.5">
+                                <i class="fas fa-database text-orange-400"></i>
+                            </div>
+                            <div>
+                                <span class="font-medium text-orange-300">Data Duplication</span>
+                                <p class="text-sm text-gray-300">Embedding can lead to redundancy and update complexity</p>
+                            </div>
+                        </li>
+                        <li class="flex items-start feature-item">
+                            <div class="w-8 h-8 rounded-full bg-orange-500/20 flex items-center justify-center mr-3 mt-0.5">
+                                <i class="fas fa-memory text-orange-400"></i>
+                            </div>
+                            <div>
+                                <span class="font-medium text-orange-300">Memory Usage</span>
+                                <p class="text-sm text-gray-300">Higher RAM requirements compared to some SQL solutions</p>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Slide number -->
+            <div class="absolute bottom-6 right-6 text-gray-400 text-sm">
+                10/12
+            </div>
+        </div>
+    </div>
+</body>
+</html>
