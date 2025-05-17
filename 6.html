@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Classroom & Video Model Design - Sarthi</title>
+    <title>Course & Lecture Management - Sarthi</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -94,65 +94,89 @@
         <div class="content w-full h-full">
             <!-- Header -->
             <div class="flex items-center mb-8">
-                <div class="w-12 h-12 rounded-full bg-gradient-to-r from-blue-400 to-teal-400 flex items-center justify-center mr-4">
-                    <i class="fas fa-database text-2xl text-white"></i>
+                <div class="w-12 h-12 rounded-full bg-gradient-to-r from-blue-400 to-green-400 flex items-center justify-center mr-4">
+                    <i class="fas fa-chalkboard-teacher text-2xl text-white"></i>
                 </div>
-                <h1 class="text-4xl font-bold gradient-text">Classroom & Video Model Design</h1>
+                <h1 class="text-4xl font-bold gradient-text">Course & Lecture Management</h1>
+            </div>
+
+            <!-- Course Management Overview -->
+            <div class="flex mb-8 gap-6">
+                <div class="model-card p-6 flex-1">
+                    <div class="flex items-center mb-4">
+                        <div class="w-10 h-10 bg-green-500/30 rounded-full flex items-center justify-center mr-3">
+                            <i class="fas fa-graduation-cap text-green-300"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold text-green-300">Teacher Features</h3>
+                    </div>
+                    
+                    <ul class="space-y-3 pl-2">
+                        <li class="flex items-start">
+                            <i class="fas fa-check-circle text-green-400 mt-1 mr-2"></i>
+                            <span>Create structured courses with multiple lectures</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-check-circle text-green-400 mt-1 mr-2"></i>
+                            <span>Upload educational videos with metadata</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-check-circle text-green-400 mt-1 mr-2"></i>
+                            <span>Generate unique invite codes for course access</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-check-circle text-green-400 mt-1 mr-2"></i>
+                            <span>View engagement analytics for lectures</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="model-card p-6 flex-1">
+                    <div class="flex items-center mb-4">
+                        <div class="w-10 h-10 bg-blue-500/30 rounded-full flex items-center justify-center mr-3">
+                            <i class="fas fa-user-graduate text-blue-300"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold text-blue-300">Student Features</h3>
+                    </div>
+                    
+                    <ul class="space-y-3 pl-2">
+                        <li class="flex items-start">
+                            <i class="fas fa-check-circle text-green-400 mt-1 mr-2"></i>
+                            <span>Join courses via invite code</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-check-circle text-green-400 mt-1 mr-2"></i>
+                            <span>Track lecture watching progress</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-check-circle text-green-400 mt-1 mr-2"></i>
+                            <span>Post comments and questions under videos</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-check-circle text-green-400 mt-1 mr-2"></i>
+                            <span>Personal notes feature for each lecture</span>
+                        </li>
+                    </ul>
+                </div>
             </div>
 
             <!-- Data Models -->
             <div class="grid grid-cols-3 gap-6 mb-6 relative">
-                <!-- User Model Card -->
+                <!-- Course Model Card -->
                 <div class="model-card p-5">
                     <div class="flex items-center mb-4">
                         <div class="w-10 h-10 bg-blue-500 rounded-full flex items-center justify-center mr-3">
-                            <i class="fas fa-user text-white"></i>
+                            <i class="fas fa-book text-white"></i>
                         </div>
-                        <h3 class="text-xl font-semibold text-blue-300">User Model</h3>
+                        <h3 class="text-xl font-semibold text-blue-300">Course Model</h3>
                     </div>
 
                     <div class="space-y-1">
                         <div class="field-item flex justify-between">
-                            <span>name</span>
+                            <span>courseName</span>
                             <span class="field-type">String</span>
                         </div>
                         <div class="field-item flex justify-between">
-                            <span>email</span>
-                            <span class="field-type">String, unique</span>
-                        </div>
-                        <div class="field-item flex justify-between">
-                            <span>passwordHash</span>
-                            <span class="field-type">String</span>
-                        </div>
-                        <div class="field-item flex justify-between">
-                            <span>role</span>
-                            <span class="field-type">Enum ['teacher', 'student']</span>
-                        </div>
-                    </div>
-
-                    <div class="mt-4 text-xs bg-black bg-opacity-30 rounded p-2 text-gray-300">
-                        <code>
-                            const UserSchema = new Schema({<br>
-                            &nbsp;&nbsp;name: { type: String, required: true },<br>
-                            &nbsp;&nbsp;email: { type: String, required: true, unique: true }<br>
-                            &nbsp;&nbsp;// additional fields<br>
-                            });
-                        </code>
-                    </div>
-                </div>
-
-                <!-- Classroom Model Card -->
-                <div class="model-card p-5">
-                    <div class="flex items-center mb-4">
-                        <div class="w-10 h-10 bg-green-500 rounded-full flex items-center justify-center mr-3">
-                            <i class="fas fa-chalkboard text-white"></i>
-                        </div>
-                        <h3 class="text-xl font-semibold text-green-300">Classroom Model</h3>
-                    </div>
-
-                    <div class="space-y-1">
-                        <div class="field-item flex justify-between">
-                            <span>name</span>
+                            <span>description</span>
                             <span class="field-type">String</span>
                         </div>
                         <div class="field-item flex justify-between">
@@ -160,6 +184,68 @@
                             <span class="field-type">ObjectId, ref: 'User'</span>
                         </div>
                         <div class="field-item flex justify-between">
+                            <span>classCode</span>
+                            <span class="field-type">String, unique</span>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- Lecture Model Card -->
+                <div class="model-card p-5">
+                    <div class="flex items-center mb-4">
+                        <div class="w-10 h-10 bg-green-500 rounded-full flex items-center justify-center mr-3">
+                            <i class="fas fa-video text-white"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold text-green-300">Lecture Model</h3>
+                    </div>
+
+                    <div class="space-y-1">
+                        <div class="field-item flex justify-between">
+                            <span>nameOfTopic</span>
+                            <span class="field-type">String</span>
+                        </div>
+                        <div class="field-item flex justify-between">
+                            <span>description</span>
+                            <span class="field-type">String</span>
+                        </div>
+                        <div class="field-item flex justify-between">
+                            <span>courseId</span>
+                            <span class="field-type">ObjectId, ref: 'Course'</span>
+                        </div>
+                        <div class="field-item flex justify-between">
+                            <span>videoLink</span>
+                            <span class="field-type">String</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Enrollment Model Card -->
+                <div class="model-card p-5">
+                    <div class="flex items-center mb-4">
+                        <div class="w-10 h-10 bg-purple-500 rounded-full flex items-center justify-center mr-3">
+                            <i class="fas fa-user-check text-white"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold text-purple-300">Enrollment Model</h3>
+                    </div>
+
+                    <div class="space-y-1">
+                        <div class="field-item flex justify-between">
+                            <span>studentId</span>
+                            <span class="field-type">ObjectId, ref: 'User'</span>
+                        </div>
+                        <div class="field-item flex justify-between">
+                            <span>courseId</span>
+                            <span class="field-type">ObjectId, ref: 'Course'</span>
+                        </div>
+                        <div class="field-item flex justify-between">
+                            <span>enrolledDate</span>
+                            <span class="field-type">Date</span>
+                        </div>
+                        <div class="field-item flex justify-between">
+                            <span>lecturesWatched</span>
+                            <span class="field-type">Array</span>
+                        </div>
                             <span>studentIds</span>
                             <span class="field-type">[ObjectId], ref: 'User'</span>
                         </div>

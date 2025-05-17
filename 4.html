@@ -1,7 +1,7 @@
 <html lang="en"><head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Folder Structure - Sarthi</title>
+    <title>Secure Auth & Role Access - Sarthi</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet">
@@ -172,82 +172,145 @@
         <div class="content w-full h-full">
             <!-- Header -->
             <div class="flex items-center mb-8">
-                <div class="w-12 h-12 rounded-full bg-gradient-to-r from-blue-400 to-teal-400 flex items-center justify-center mr-4">
-                    <i class="fas fa-folder-tree text-2xl text-white"></i>
+                <div class="w-12 h-12 rounded-full bg-gradient-to-r from-blue-400 to-purple-400 flex items-center justify-center mr-4">
+                    <i class="fas fa-lock text-2xl text-white"></i>
                 </div>
-                <h1 class="text-4xl font-bold gradient-text">Folder Structure</h1>
-                <span class="ml-2 text-gray-400">(Code Organization)</span>
+                <h1 class="text-4xl font-bold gradient-text">Secure Auth & Role Access</h1>
+                <span class="ml-2 text-gray-400">(JWT Implementation)</span>
             </div>
 
-            <!-- Folder Structure Cards -->
-            <div class="grid grid-cols-3 gap-6 mb-4">
-                <!-- Backend Structure -->
-                <div class="folder-card p-6">
+            <!-- Authentication Flow Section -->
+            <div class="grid grid-cols-4 gap-6 mb-8">
+                <!-- Step 1: Registration -->
+                <div class="folder-card p-5">
                     <div class="flex items-center mb-3">
-                        <i class="fas fa-server text-2xl mr-3 backend-item"></i>
-                        <h2 class="text-2xl font-semibold">Backend/</h2>
+                        <div class="w-10 h-10 bg-blue-500/40 rounded-full flex items-center justify-center mr-3">
+                            <i class="fas fa-user-plus text-blue-300"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold text-blue-300">Registration</h3>
                     </div>
-                    <div class="pl-4 border-l-2 border-blue-400/30">
-                        <div class="folder-item pl-2 flex items-center">
-                            <i class="fas fa-folder backend-item mr-2"></i>
-                            <span>routes/</span>
+                    <ul class="pl-4 space-y-2 text-sm">
+                        <li class="flex items-start">
+                            <i class="fas fa-check-circle text-green-400 mt-1 mr-2"></i>
+                            <span>User data validation</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-check-circle text-green-400 mt-1 mr-2"></i>
+                            <span>Password hashing (bcrypt)</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <!-- Arrow -->
+                <div class="flex items-center justify-center">
+                    <i class="fas fa-long-arrow-alt-right text-blue-300 text-2xl"></i>
+                </div>
+
+                <!-- Step 2: Email Verification -->
+                <div class="folder-card p-5">
+                    <div class="flex items-center mb-3">
+                        <div class="w-10 h-10 bg-green-500/40 rounded-full flex items-center justify-center mr-3">
+                            <i class="fas fa-envelope-open-text text-green-300"></i>
                         </div>
-                        <div class="folder-item pl-2 flex items-center">
-                            <i class="fas fa-folder backend-item mr-2"></i>
-                            <span>controllers/</span>
-                        </div>
-                        <div class="folder-item pl-2 flex items-center">
-                            <i class="fas fa-folder backend-item mr-2"></i>
-                            <span>models/</span>
-                        </div>
-                        <div class="folder-item pl-2 flex items-center">
-                            <i class="fas fa-file-code backend-item mr-2"></i>
-                            <span>ffmpegService.js</span>
-                        </div>
-                        <div class="folder-item pl-2 flex items-center">
-                            <i class="fas fa-file-code backend-item mr-2"></i>
-                            <span>server.js</span>
-                        </div>
+                        <h3 class="text-xl font-semibold text-green-300">Email Verification</h3>
                     </div>
-                    <div class="mt-4 bg-blue-900/30 p-3 rounded-md">
-                        <p class="text-sm text-blue-200"><i class="fas fa-circle-info mr-1"></i> Express.js server with MongoDB integration</p>
+                    <ul class="pl-4 space-y-2 text-sm">
+                        <li class="flex items-start">
+                            <i class="fas fa-check-circle text-green-400 mt-1 mr-2"></i>
+                            <span>Verification link with token</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-check-circle text-green-400 mt-1 mr-2"></i>
+                            <span>isVerified flag update</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Arrow -->
+                <div class="flex items-center justify-center">
+                    <i class="fas fa-long-arrow-alt-right text-blue-300 text-2xl"></i>
+                </div>
+
+                <!-- Step 3: JWT Token -->
+                <div class="folder-card p-5">
+                    <div class="flex items-center mb-3">
+                        <div class="w-10 h-10 bg-purple-500/40 rounded-full flex items-center justify-center mr-3">
+                            <i class="fas fa-key text-purple-300"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold text-purple-300">JWT Token</h3>
+                    </div>
+                    <pre class="bg-gray-800/50 p-3 rounded-md text-sm overflow-x-auto">
+<span class="text-green-400">// Generate token during login</span>
+<span class="text-blue-300">const</span> <span class="text-yellow-300">token</span> = jwt.sign(
+  { userId: user._id, role: user.role },
+  <span class="text-orange-300">process.env.JWT_SECRET</span>,
+  { expiresIn: <span class="text-orange-300">'24h'</span> }
+);</pre>
+                </div>
+            </div>
+
+            <!-- JWT Flow -->
+            <div class="grid grid-cols-2 gap-8 mb-8">
+                <!-- Left: JWT Middleware -->
+                <div class="folder-card p-6">
+                    <div class="flex items-center mb-4">
+                        <div class="w-10 h-10 bg-yellow-500/40 rounded-full flex items-center justify-center mr-3">
+                            <i class="fas fa-shield-alt text-yellow-300"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold text-yellow-300">Auth Middleware</h3>
+                    </div>
+                    <pre class="bg-gray-800/50 p-3 rounded-md text-sm overflow-x-auto mb-4">
+<span class="text-blue-300">const</span> <span class="text-yellow-300">token</span> = req.headers[<span class="text-orange-300">'authorization'</span>]?.split(<span class="text-orange-300">' '</span>)[<span class="text-purple-300">1</span>];
+<span class="text-blue-300">const</span> <span class="text-yellow-300">decoded</span> = jwt.verify(token, process.env.JWT_SECRET);
+req.user = decoded;</pre>
+                    <div class="bg-gray-800/30 p-3 rounded-lg">
+                        <h4 class="text-sm font-semibold text-yellow-200 mb-2">Common Routes Protection:</h4>
+                        <div class="text-xs">
+                            <code>router.get('/courses', authMiddleware, courseController.getCourses);</code>
+                        </div>
                     </div>
                 </div>
 
-                <!-- Frontend Structure -->
+                <!-- Right: Role-Based Access -->
                 <div class="folder-card p-6">
                     <div class="flex items-center mb-3">
-                        <i class="fas fa-desktop text-2xl mr-3 frontend-item"></i>
-                        <h2 class="text-2xl font-semibold">Frontend/</h2>
+                        <div class="w-10 h-10 bg-red-500/40 rounded-full flex items-center justify-center mr-3">
+                            <i class="fas fa-users-cog text-red-300"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold text-red-300">Role-Based Access</h3>
                     </div>
-                    <div class="pl-4 border-l-2 border-blue-500/30">
-                        <div class="folder-item pl-2 flex items-center">
-                            <i class="fas fa-folder frontend-item mr-2"></i>
-                            <span>components/</span>
+                    <div class="grid grid-cols-2 gap-4 mb-4">
+                        <div class="bg-gray-800/50 p-3 rounded-md">
+                            <h4 class="font-medium text-gray-400 mb-2">Student</h4>
+                            <ul class="list-disc pl-5 text-sm space-y-1">
+                                <li>Consume content</li>
+                                <li>Add comments</li>
+                                <li>Track progress</li>
+                            </ul>
                         </div>
-                        <div class="folder-item pl-2 flex items-center">
-                            <i class="fas fa-folder frontend-item mr-2"></i>
-                            <span>pages/</span>
-                        </div>
-                        <div class="folder-item pl-2 flex items-center">
-                            <i class="fas fa-folder frontend-item mr-2"></i>
-                            <span>context/</span>
-                        </div>
-                        <div class="folder-item pl-2 flex items-center">
-                            <i class="fas fa-file-code frontend-item mr-2"></i>
-                            <span>VideoPlayer.jsx</span>
-                        </div>
-                        <div class="folder-item pl-2 flex items-center">
-                            <i class="fas fa-file frontend-item mr-2"></i>
-                            <span>App.jsx</span>
+                        <div class="bg-gray-800/50 p-3 rounded-md">
+                            <h4 class="font-medium text-gray-400 mb-2">Teacher</h4>
+                            <ul class="list-disc pl-5 text-sm space-y-1">
+                                <li>Upload videos</li>
+                                <li>Manage courses</li>
+                                <li>View analytics</li>
+                            </ul>
                         </div>
                     </div>
-                    <div class="mt-4 bg-blue-900/30 p-3 rounded-md">
-                        <p class="text-sm text-blue-200"><i class="fas fa-circle-info mr-1"></i> React-based UI with classroom components</p>
+                    <div class="bg-gray-800/30 p-3 rounded-lg text-sm mt-4">
+                        <code class="text-xs">
+const isTeacher = (req, res, next) => {<br>
+&nbsp;&nbsp;if (req.user.role !== 'teacher') {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;return res.status(403).json({ message: 'Access denied' });<br>
+&nbsp;&nbsp;}<br>
+&nbsp;&nbsp;next();<br>
+};
+                        </code>
                     </div>
                 </div>
+                </div>
 
-                <!-- Storage Structure -->
+                <!-- Slide number -->
                 <div class="folder-card p-6">
                     <div class="flex items-center mb-3">
                         <i class="fas fa-database text-2xl mr-3 storage-item"></i>
@@ -277,35 +340,35 @@
                 </div>
             </div>
 
-            <!-- Additional Notes -->
+            <!-- Auth Benefits -->
             <div class="mt-2 bg-white/10 p-4 rounded-lg">
                 <h3 class="text-xl font-semibold mb-2 flex items-center">
-                    <i class="fas fa-code-branch text-teal-300 mr-3"></i>
-                    Code Structure Notes
+                    <i class="fas fa-check-circle text-green-300 mr-3"></i>
+                    Security Benefits
                 </h3>
                 <div class="grid grid-cols-2 gap-4">
                     <div class="flex items-start">
-                        <i class="fas fa-check-circle text-green-400 mt-1 mr-2"></i>
-                        <p>Clear separation of concerns with MVC pattern in backend</p>
+                        <i class="fas fa-shield-alt text-blue-400 mt-1 mr-2"></i>
+                        <p>Stateless authentication with cryptographic signing</p>
                     </div>
                     <div class="flex items-start">
-                        <i class="fas fa-check-circle text-green-400 mt-1 mr-2"></i>
-                        <p>Component-based architecture in React frontend</p>
+                        <i class="fas fa-key text-blue-400 mt-1 mr-2"></i>
+                        <p>Fine-grained role-based permissions</p>
                     </div>
                     <div class="flex items-start">
-                        <i class="fas fa-check-circle text-green-400 mt-1 mr-2"></i>
-                        <p>Organized video storage with unique IDs</p>
+                        <i class="fas fa-clock text-blue-400 mt-1 mr-2"></i>
+                        <p>Automatic token expiration for better security</p>
                     </div>
                     <div class="flex items-start">
-
-                        <p></p>
+                        <i class="fas fa-server text-blue-400 mt-1 mr-2"></i>
+                        <p>Reduced database load (no session storage)</p>
                     </div>
                 </div>
             </div>
 
             <!-- Slide number -->
             <div class="absolute bottom-6 right-6 text-gray-400 text-sm">
-                4/12
+                Slide 4 | Secure Auth & Role Access
             </div>
         </div>
     </div>

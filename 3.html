@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>System Architecture - Sarthi</title>
+    <title>Technology Stack - Sarthi</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -72,13 +72,138 @@
             <!-- Header -->
             <div class="flex items-center mb-8">
                 <div class="w-12 h-12 rounded-full bg-gradient-to-r from-blue-400 to-teal-400 flex items-center justify-center mr-4">
-                    <i class="fas fa-sitemap text-2xl text-white"></i>
+                    <i class="fas fa-layer-group text-2xl text-white"></i>
                 </div>
-                <h1 class="text-4xl font-bold gradient-text">System Architecture</h1>
+                <h1 class="text-4xl font-bold gradient-text">Technology Stack</h1>
             </div>
 
-            <!-- Diagram Section -->
-            <div class="diagram-container p-6 mb-6">
+            <!-- Technology Stack Section -->
+            <div class="grid grid-cols-3 gap-8 mb-8">
+                <!-- Frontend Stack -->
+                <div class="highlight-box p-6">
+                    <h2 class="text-2xl font-bold mb-4 text-blue-300">Frontend</h2>
+                    <ul class="space-y-4">
+                        <li class="flex items-center">
+                            <i class="fab fa-react text-3xl text-blue-400 mr-3"></i>
+                            <div>
+                                <p class="font-medium">React</p>
+                                <p class="text-sm text-gray-400">UI Components & State Management</p>
+                            </div>
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-video text-3xl text-red-400 mr-3"></i>
+                            <div>
+                                <p class="font-medium">HLS.js</p>
+                                <p class="text-sm text-gray-400">Video Streaming Client</p>
+                            </div>
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fab fa-css3 text-3xl text-blue-300 mr-3"></i>
+                            <div>
+                                <p class="font-medium">Tailwind CSS</p>
+                                <p class="text-sm text-gray-400">Styling & Responsive Design</p>
+                            </div>
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-exchange-alt text-3xl text-yellow-400 mr-3"></i>
+                            <div>
+                                <p class="font-medium">Axios</p>
+                                <p class="text-sm text-gray-400">HTTP Client</p>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Backend Stack -->
+                <div class="highlight-box p-6">
+                    <h2 class="text-2xl font-bold mb-4 text-green-300">Backend</h2>
+                    <ul class="space-y-4">
+                        <li class="flex items-center">
+                            <i class="fab fa-node-js text-3xl text-green-400 mr-3"></i>
+                            <div>
+                                <p class="font-medium">Node.js</p>
+                                <p class="text-sm text-gray-400">Runtime Environment</p>
+                            </div>
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fab fa-js text-3xl text-yellow-400 mr-3"></i>
+                            <div>
+                                <p class="font-medium">Express</p>
+                                <p class="text-sm text-gray-400">Web Framework & Routing</p>
+                            </div>
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-database text-3xl text-green-300 mr-3"></i>
+                            <div>
+                                <p class="font-medium">MongoDB</p>
+                                <p class="text-sm text-gray-400">Database</p>
+                            </div>
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-key text-3xl text-purple-400 mr-3"></i>
+                            <div>
+                                <p class="font-medium">JWT</p>
+                                <p class="text-sm text-gray-400">Authentication</p>
+                            </div>
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-file-video text-3xl text-red-500 mr-3"></i>
+                            <div>
+                                <p class="font-medium">FFmpeg</p>
+                                <p class="text-sm text-gray-400">Video Encoding</p>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- DevOps Stack -->
+                <div class="highlight-box p-6">
+                    <h2 class="text-2xl font-bold mb-4 text-purple-300">DevOps</h2>
+                    <ul class="space-y-4">
+                        <li class="flex items-center">
+                            <i class="fab fa-docker text-3xl text-blue-400 mr-3"></i>
+                            <div>
+                                <p class="font-medium">Docker</p>
+                                <p class="text-sm text-gray-400">Containerization</p>
+                            </div>
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fab fa-github-alt text-3xl text-gray-300 mr-3"></i>
+                            <div>
+                                <p class="font-medium">GitHub Actions</p>
+                                <p class="text-sm text-gray-400">CI/CD Pipeline</p>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Notable Tools -->
+            <div class="bg-gray-800/30 p-6 rounded-lg mb-6">
+                <h2 class="text-xl font-semibold mb-4"><i class="fas fa-star text-yellow-400 mr-2"></i>Notable Tools</h2>
+                <div class="grid grid-cols-4 gap-4">
+                    <div class="bg-white/10 p-3 rounded-lg text-center">
+                        <i class="fas fa-file-video text-2xl mb-2 text-red-400"></i>
+                        <p class="font-medium">FFmpeg</p>
+                        <p class="text-xs text-gray-400">Video encoding</p>
+                    </div>
+                    <div class="bg-white/10 p-3 rounded-lg text-center">
+                        <i class="fas fa-play-circle text-2xl mb-2 text-blue-400"></i>
+                        <p class="font-medium">HLS.js</p>
+                        <p class="text-xs text-gray-400">Frontend streaming</p>
+                    </div>
+                    <div class="bg-white/10 p-3 rounded-lg text-center">
+                        <i class="fas fa-key text-2xl mb-2 text-purple-400"></i>
+                        <p class="font-medium">JWT</p>
+                        <p class="text-xs text-gray-400">Authentication</p>
+                    </div>
+                    <div class="bg-white/10 p-3 rounded-lg text-center">
+                        <i class="fas fa-sitemap text-2xl mb-2 text-green-400"></i>
+                        <p class="font-medium">Mongoose</p>
+                        <p class="text-xs text-gray-400">ODM</p>
+                    </div>
+                </div>
+            </div>
                 <div class="flex justify-center">
                     <img src="https://cdn1.genspark.ai/user-upload-image/gpt_image_generated/00498c9e-d2e0-4072-9c61-dd6c1cd80c6f_wm" alt="Sarthi System Architecture" class="w-3/4 max-h-[380px] object-contain rounded-lg">
                 </div>

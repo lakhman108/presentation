@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Authentication System - Sarthi</title>
+    <title>Course & Lecture Management - Sarthi</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -75,30 +75,101 @@
             <!-- Header -->
             <div class="flex items-center mb-8">
                 <div class="w-12 h-12 rounded-full bg-gradient-to-r from-blue-400 to-teal-400 flex items-center justify-center mr-4">
-                    <i class="fas fa-lock text-2xl text-white"></i>
+                    <i class="fas fa-book text-2xl text-white"></i>
                 </div>
-                <h1 class="text-4xl font-bold gradient-text">Authentication System</h1>
-                <span class="ml-2 text-gray-400">(JWT)</span>
+                <h1 class="text-4xl font-bold gradient-text">Course & Lecture Management</h1>
             </div>
 
-            <!-- Authentication Flow Diagram -->
-            <div class="relative mx-auto mb-8 h-64">
-                <!-- Register Card -->
-                <div class="auth-card p-5 absolute left-0 top-0 w-72">
-                    <div class="flex items-center mb-3">
+            <!-- Course Management Section -->
+            <div class="grid grid-cols-2 gap-8 mb-8">
+                <!-- Teacher Features -->
+                <div class="auth-card p-6">
+                    <div class="flex items-center mb-4">
                         <div class="w-10 h-10 bg-blue-500 rounded-full flex items-center justify-center mr-3">
-                            <i class="fas fa-user-plus text-white"></i>
+                            <i class="fas fa-chalkboard-teacher text-white"></i>
                         </div>
-                        <h3 class="text-xl font-semibold text-blue-300">Registration</h3>
+                        <h3 class="text-xl font-semibold text-blue-300">Teachers</h3>
                     </div>
-                    <ul class="pl-4 space-y-2 text-sm">
+                    <ul class="pl-4 space-y-3 text-sm">
                         <li class="flex items-start">
                             <i class="fas fa-check-circle text-green-400 mt-1 mr-2"></i>
-                            <span>User data validation</span>
+                            <span>Create structured courses</span>
                         </li>
                         <li class="flex items-start">
                             <i class="fas fa-check-circle text-green-400 mt-1 mr-2"></i>
-                            <span>Password hashing with <code class="bg-gray-800 px-1 rounded">bcrypt</code></span>
+                            <span>Manage and organize lecture content</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-check-circle text-green-400 mt-1 mr-2"></i>
+                            <span>Track student engagement and progress</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-check-circle text-green-400 mt-1 mr-2"></i>
+                            <span>Generate course invite codes</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Student Features -->
+                <div class="auth-card p-6">
+                    <div class="flex items-center mb-4">
+                        <div class="w-10 h-10 bg-green-500 rounded-full flex items-center justify-center mr-3">
+                            <i class="fas fa-user-graduate text-white"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold text-green-300">Students</h3>
+                    </div>
+                    <ul class="pl-4 space-y-3 text-sm">
+                        <li class="flex items-start">
+                            <i class="fas fa-check-circle text-green-400 mt-1 mr-2"></i>
+                            <span>Join via invite code</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-check-circle text-green-400 mt-1 mr-2"></i>
+                            <span>Access organized course materials</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-check-circle text-green-400 mt-1 mr-2"></i>
+                            <span>Track personal progress</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-check-circle text-green-400 mt-1 mr-2"></i>
+                            <span>Engage with lecture comments and notes</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Lecture Units -->
+            <div class="auth-card p-6 mb-8">
+                <h3 class="text-xl font-semibold mb-4 text-yellow-300 flex items-center">
+                    <i class="fas fa-film mr-3"></i>
+                    Lecture Units
+                </h3>
+                <p class="text-gray-300 mb-4">Each lecture includes video, comments, and analytics</p>
+                <div class="grid grid-cols-3 gap-6">
+                    <div class="bg-blue-900/30 p-4 rounded-lg">
+                        <div class="flex items-center mb-2">
+                            <i class="fas fa-video text-blue-300 mr-2"></i>
+                            <h4 class="font-medium">Video Content</h4>
+                        </div>
+                        <p class="text-sm text-gray-400">HLS streaming with adaptive resolution</p>
+                    </div>
+                    <div class="bg-green-900/30 p-4 rounded-lg">
+                        <div class="flex items-center mb-2">
+                            <i class="fas fa-comments text-green-300 mr-2"></i>
+                            <h4 class="font-medium">Comments</h4>
+                        </div>
+                        <p class="text-sm text-gray-400">Interactive discussion per lecture</p>
+                    </div>
+                    <div class="bg-purple-900/30 p-4 rounded-lg">
+                        <div class="flex items-center mb-2">
+                            <i class="fas fa-chart-line text-purple-300 mr-2"></i>
+                            <h4 class="font-medium">Analytics</h4>
+                        </div>
+                        <p class="text-sm text-gray-400">Views, completion rates, engagement</p>
+                    </div>
+                </div>
+            </div>
                         </li>
                         <li class="flex items-start">
                             <i class="fas fa-check-circle text-green-400 mt-1 mr-2"></i>

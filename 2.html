@@ -1,7 +1,7 @@
 <html lang="en"><head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Project Overview - Sarthi</title>
+    <title>System Architecture (High-Level) - Sarthi</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet">
@@ -160,22 +160,142 @@
         <!-- Main content -->
         <div class="content w-full h-full">
             <!-- Header -->
+            <div class="flex items-center mb-8">
+                <div class="w-12 h-12 rounded-full bg-gradient-to-r from-blue-400 to-teal-400 flex items-center justify-center mr-4">
+                    <i class="fas fa-sitemap text-2xl text-white"></i>
+                </div>
+                <h1 class="text-4xl font-bold gradient-text">System Architecture</h1>
+            </div>
+
+            <!-- Architecture diagram -->
+            <div class="tech-card p-6 mb-8">
+                <div class="bg-gray-800/40 p-6 rounded-lg">
+                    <div class="grid grid-cols-5 gap-4 mb-10">
+                        <!-- User Browser -->
+                        <div class="col-span-1 flex flex-col items-center">
+                            <div class="bg-blue-500/20 p-4 rounded-lg flex flex-col items-center w-full">
+                                <i class="fas fa-laptop text-3xl mb-2 text-blue-300"></i>
+                                <p class="font-medium text-center">User Browser</p>
+                            </div>
+                            <div class="h-10 w-0.5 bg-blue-400/50 my-2"></div>
+                        </div>
+                        <div class="col-span-4"></div>
+
+                        <!-- React Frontend -->
+                        <div class="col-span-1 flex flex-col items-center">
+                            <div class="bg-blue-500/30 p-4 rounded-lg flex flex-col items-center w-full">
+                                <i class="fab fa-react text-3xl mb-2 text-blue-300"></i>
+                                <p class="font-medium text-center">React Frontend</p>
+                            </div>
+                            <div class="h-10 w-0.5 bg-blue-400/50 my-2"></div>
+                        </div>
+                        <div class="col-span-4"></div>
+
+                        <!-- Express Backend -->
+                        <div class="col-span-1 flex flex-col items-center">
+                            <div class="bg-green-500/30 p-4 rounded-lg flex flex-col items-center w-full">
+                                <i class="fab fa-node-js text-3xl mb-2 text-green-300"></i>
+                                <p class="font-medium text-center">Express Backend</p>
+                            </div>
+                            <div class="flex my-4">
+                                <div class="h-0.5 w-32 bg-green-400/50"></div>
+                                <div class="h-0.5 w-32 bg-green-400/50"></div>
+                                <div class="h-0.5 w-32 bg-green-400/50"></div>
+                            </div>
+                        </div>
+                        <div class="col-span-4"></div>
+
+                        <!-- Backend Services -->
+                        <div class="col-span-5 grid grid-cols-4 gap-4">
+                            <div class="bg-purple-500/20 p-4 rounded-lg flex flex-col items-center">
+                                <i class="fas fa-key text-2xl mb-2 text-purple-300"></i>
+                                <p class="font-medium text-center">JWT Auth</p>
+                            </div>
+                            <div class="bg-yellow-500/20 p-4 rounded-lg flex flex-col items-center">
+                                <i class="fas fa-book text-2xl mb-2 text-yellow-300"></i>
+                                <p class="font-medium text-center">Course Mgmt</p>
+                            </div>
+                            <div class="bg-red-500/20 p-4 rounded-lg flex flex-col items-center">
+                                <i class="fas fa-upload text-2xl mb-2 text-red-300"></i>
+                                <p class="font-medium text-center">Video Upload & Encoding</p>
+                            </div>
+                            <div class="bg-blue-500/20 p-4 rounded-lg flex flex-col items-center">
+                                <i class="fas fa-play text-2xl mb-2 text-blue-300"></i>
+                                <p class="font-medium text-center">HLS Streaming Handler</p>
+                            </div>
+                        </div>
+
+                        <!-- Data Layer -->
+                        <div class="col-span-5 grid grid-cols-3 gap-4 mt-6">
+                            <div class="bg-green-500/20 p-4 rounded-lg flex flex-col items-center">
+                                <i class="fas fa-database text-3xl mb-2 text-green-300"></i>
+                                <p class="font-medium text-center">MongoDB</p>
+                            </div>
+                            <div class="bg-gray-500/20 p-4 rounded-lg flex flex-col items-center">
+                                <i class="fas fa-folder-open text-3xl mb-2 text-gray-300"></i>
+                                <p class="font-medium text-center">Filesystem - HLS Output</p>
+                            </div>
+                            <div class="bg-red-500/20 p-4 rounded-lg flex flex-col items-center">
+                                <i class="fas fa-file-video text-3xl mb-2 text-red-300"></i>
+                                <p class="font-medium text-center">FFmpeg Processing</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Architecture Details -->
+            <div class="grid grid-cols-2 gap-8">
+                <div class="tech-card p-6">
+                    <h3 class="text-xl font-semibold mb-4 text-blue-300"><i class="fas fa-info-circle mr-2"></i>Architecture Style</h3>
+                    <p class="text-gray-300 mb-4">Modular monolith with RESTful API boundaries</p>
+                    <ul class="space-y-2">
+                        <li class="flex items-start">
+                            <i class="fas fa-check-circle text-green-400 mt-1 mr-2"></i>
+                            <span>Clear service boundaries with dedicated controllers</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-check-circle text-green-400 mt-1 mr-2"></i>
+                            <span>Separation of concerns between business logic and data access</span>
+                        </li>
+                    </ul>
+                </div>
+                <div class="tech-card p-6">
+                    <h3 class="text-xl font-semibold mb-4 text-green-300"><i class="fas fa-cogs mr-2"></i>Design Consideration</h3>
+                    <p class="text-gray-300 mb-4">Media processing isolated from request-response logic for performance</p>
+                    <ul class="space-y-2">
+                        <li class="flex items-start">
+                            <i class="fas fa-check-circle text-green-400 mt-1 mr-2"></i>
+                            <span>Asynchronous video processing with job queues</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-check-circle text-green-400 mt-1 mr-2"></i>
+                            <span>Efficient streaming with chunked delivery and caching</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Slide number and presenter info -->
+            <div class="absolute bottom-6 right-6 text-gray-400 text-sm">
+                Slide 2 | System Architecture
+            </div>
+            <!-- Header -->
             <div class="flex items-center mb-10">
                 <div class="w-12 h-12 rounded-full bg-gradient-to-r from-blue-400 to-teal-400 flex items-center justify-center mr-4">
                     <i class="fas fa-project-diagram text-2xl text-white"></i>
                 </div>
-                <h1 class="text-4xl font-bold gradient-text">Project Overview</h1>
+                <h1 class="text-4xl font-bold gradient-text">System Architecture (High-Level)</h1>
             </div>
 
-            <!-- Purpose Section -->
-            <div class="mb-12">
-                <h2 class="text-2xl font-semibold mb-4 flex items-center">
-                    <i class="fas fa-bullseye text-teal-300 mr-3"></i>
-                    Purpose
-                </h2>
+            <!-- Architecture Diagram Section -->
+            <div class="mb-8 text-center">
                 <div class="bg-gradient-to-r from-blue-900/30 to-teal-900/30 p-6 rounded-lg border-l-4 border-teal-400">
-                    <p class="text-xl font-light">Sarthi is a classroom-style platform that enables
-                        adaptive video streaming for smooth learning experience</p>
+                    <div class="mb-5">
+                        <div class="flow-chart-container" style="display: flex; justify-content: center;">
+                            <img src="https://mermaid.ink/img/pako:eNp1kk1PwzAMhv9KlHMRo2xMo_RcadoBiQNiF5Q5rktEP6LGRQjx3-k6pjEJcsnt9T62n9jbiATFoODb2ESNT1IXeYMp022Bewj9bPHDNhj0-SNoBhda0HD2OLPR9llnzTZAe2Pm0iRdDwiL5WMxBZ3ae9Bo2X6CWI3ABAcaZlAowSU4U39NS-0l7EWXwY2pGoXyYxKutK3yBd6JStfCmmSiH2Sg4hGtRCeYqFT6M9jwDDtHut77G9QPOiGwJp6SnZKQt-TKGfBwcQboNPQM7S8VEvp_VJ7S_3HFHmPwUK-fN63q5vW06_e_2mQrrOFAmFvkeQsGGjg8a0cNvHRQXNEZuroVsoi5GCtH_tYYjRe0UBJeOqGm8nVY_bLxEhKOPEfpXjlpX_2-rLijhVNxSfiDy355-bP5TXv79AtOsJHD?type=png" alt="System Architecture Diagram" class="rounded-lg">
+                        </div>
+                    </div>
                 </div>
             </div>
 
